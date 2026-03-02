@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Upload } from "lucide-react";
+import { CheckCircle2, Upload, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Apply = () => {
   const [searchParams] = useSearchParams();
@@ -13,7 +15,65 @@ const Apply = () => {
   const [pillar, setPillar] = useState(searchParams.get("pillar") || "");
   const [level, setLevel] = useState(searchParams.get("level") || "");
   const [submitted, setSubmitted] = useState(false);
-  const [appCode] = useState(`ALC-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 4).toUpperCase()}`);
+  const [appCode, setAppCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const [form, setForm] = useState({
+    full_name: "", email: "", phone: "", country: "",
+    destination: "", company: "", industry: "", business_challenge: "",
+    current_role: "", target_role: "", research: "", goals: "",
+  });
+
+  const mapPillar = (p: string) => {
+    if (p === "student") return "travel";
+    return p as "business" | "career" | "travel";
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const formData: Record<string, string> = { ...form, level };
+    Object.keys(formData).forEach((k) => { if (!formData[k]) delete formData[k]; });
+
+    const { data, error } = await supabase.from("applications").insert({
+      full_name: form.full_name,
+      email: form.email,
+      phone: form.phone || null,
+      consultation_type: mapPillar(pillar),
+      form_data: formData,
+      application_code: "",
+    }).select("application_code").single();
+
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      setLoading(false);
+      return;
+    }
+
+    if (files.length > 0 && data) {
+      for (const file of files) {
+        const path = `${data.application_code}/${file.name}`;
+        await supabase.storage.from("application-documents").upload(path, file);
+        await supabase.from("application_documents").insert({
+          application_id: undefined as any,
+          file_name: file.name,
+          file_path: path,
+          file_size: file.size,
+          mime_type: file.type,
+        });
+      }
+    }
+
+    setAppCode(data?.application_code || "");
+    setSubmitted(true);
+    setLoading(false);
+  };
+
+  const addFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) setFiles([...files, ...Array.from(e.target.files)]);
+  };
 
   if (submitted) {
     return (
@@ -22,7 +82,7 @@ const Apply = () => {
           <CheckCircle2 className="w-16 h-16 text-gold mx-auto mb-6" />
           <h1 className="font-serif text-3xl font-bold text-primary mb-4">Application Submitted!</h1>
           <p className="text-muted-foreground mb-2">Your application code: <span className="font-mono font-bold text-primary">{appCode}</span></p>
-          <p className="text-muted-foreground mb-8">Save this code to track your application status. You will also receive it via email.</p>
+          <p className="text-muted-foreground mb-8">Save this code to track your application status.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/application-status"><Button className="bg-gold text-navy hover:bg-gold/90 font-semibold">Track Status</Button></Link>
             <Link to="/"><Button variant="outline">Back to Home</Button></Link>
@@ -43,7 +103,6 @@ const Apply = () => {
           </div>
         </div>
       </section>
-
       <section className="section-padding">
         <div className="container-narrow">
           <div className="flex items-center justify-center gap-2 mb-12">
@@ -85,30 +144,28 @@ const Apply = () => {
           {step === 2 && (
             <div className="space-y-5 max-w-md mx-auto">
               <h2 className="font-serif text-2xl font-bold text-primary text-center mb-6">Your Information</h2>
-              <Input placeholder="Full Name" required className="bg-card" />
-              <Input type="email" placeholder="Email Address" required className="bg-card" />
-              <Input placeholder="Phone (optional)" className="bg-card" />
-              <Input placeholder="Country of Residence" className="bg-card" />
-              {pillar === "travel" && <Input placeholder="Destination Country" className="bg-card" />}
+              <Input placeholder="Full Name" required className="bg-card" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
+              <Input type="email" placeholder="Email Address" required className="bg-card" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              <Input placeholder="Phone (optional)" className="bg-card" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <Input placeholder="Country of Residence" className="bg-card" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} />
+              {pillar === "travel" && <Input placeholder="Destination Country" className="bg-card" value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} />}
               {pillar === "business" && (
                 <>
-                  <Input placeholder="Company Name" className="bg-card" />
-                  <Input placeholder="Industry" className="bg-card" />
-                  <Textarea placeholder="Describe your business challenge..." rows={3} className="bg-card" />
+                  <Input placeholder="Company Name" className="bg-card" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
+                  <Input placeholder="Industry" className="bg-card" value={form.industry} onChange={(e) => setForm({ ...form, industry: e.target.value })} />
+                  <Textarea placeholder="Describe your business challenge..." rows={3} className="bg-card" value={form.business_challenge} onChange={(e) => setForm({ ...form, business_challenge: e.target.value })} />
                 </>
               )}
               {pillar === "career" && (
                 <>
-                  <Input placeholder="Current Role" className="bg-card" />
-                  <Input placeholder="Target Role" className="bg-card" />
+                  <Input placeholder="Current Role" className="bg-card" value={form.current_role} onChange={(e) => setForm({ ...form, current_role: e.target.value })} />
+                  <Input placeholder="Target Role" className="bg-card" value={form.target_role} onChange={(e) => setForm({ ...form, target_role: e.target.value })} />
                 </>
               )}
-              {(pillar === "student" && level === "PhD") && <Textarea placeholder="Brief research proposal outline..." rows={3} className="bg-card" />}
-              {(pillar === "student" && level === "Grad") && <Textarea placeholder="Research interests..." rows={3} className="bg-card" />}
-              <Textarea placeholder="Program goals and motivations" rows={3} className="bg-card" />
+              <Textarea placeholder="Program goals and motivations" rows={3} className="bg-card" value={form.goals} onChange={(e) => setForm({ ...form, goals: e.target.value })} />
               <div className="flex justify-between pt-2">
                 <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
-                <Button onClick={() => setStep(3)} className="bg-gold text-navy hover:bg-gold/90 font-semibold">Continue</Button>
+                <Button onClick={() => form.full_name && form.email && setStep(3)} className="bg-gold text-navy hover:bg-gold/90 font-semibold">Continue</Button>
               </div>
             </div>
           )}
@@ -116,12 +173,22 @@ const Apply = () => {
           {step === 3 && (
             <div className="space-y-5 max-w-md mx-auto">
               <h2 className="font-serif text-2xl font-bold text-primary text-center mb-6">Upload Documents</h2>
-              <p className="text-muted-foreground text-sm text-center mb-4">Upload required documents for your application. Supported: PDF, DOC, JPG, PNG.</p>
-              <div className="border-2 border-dashed border-border rounded-xl p-10 text-center hover:border-accent transition-colors cursor-pointer">
+              <p className="text-muted-foreground text-sm text-center mb-4">Upload required documents. Supported: PDF, DOC, JPG, PNG (max 10MB).</p>
+              <div onClick={() => fileRef.current?.click()} className="border-2 border-dashed border-border rounded-xl p-10 text-center hover:border-accent transition-colors cursor-pointer">
                 <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">Drag files here or click to browse</p>
-                <p className="text-xs text-muted-foreground mt-1">Max 10MB per file</p>
+                <p className="text-sm text-muted-foreground">Click to browse files</p>
+                <input ref={fileRef} type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onChange={addFiles} className="hidden" />
               </div>
+              {files.length > 0 && (
+                <div className="space-y-2">
+                  {files.map((f, i) => (
+                    <div key={i} className="flex items-center justify-between bg-muted/30 rounded-lg p-2 text-sm">
+                      <span>{f.name} ({(f.size / 1024).toFixed(0)}KB)</span>
+                      <button onClick={() => setFiles(files.filter((_, idx) => idx !== i))}><X className="w-4 h-4 text-muted-foreground" /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="flex justify-between pt-2">
                 <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
                 <Button onClick={() => setStep(4)} className="bg-gold text-navy hover:bg-gold/90 font-semibold">Continue</Button>
@@ -135,11 +202,15 @@ const Apply = () => {
               <div className="bg-off-white rounded-lg p-6 text-sm space-y-2">
                 <p><span className="font-semibold">Track:</span> {pillar}</p>
                 {level && <p><span className="font-semibold">Level:</span> {level}</p>}
-                <p className="text-muted-foreground text-xs mt-3">Please review your information before submitting.</p>
+                <p><span className="font-semibold">Name:</span> {form.full_name}</p>
+                <p><span className="font-semibold">Email:</span> {form.email}</p>
+                {files.length > 0 && <p><span className="font-semibold">Documents:</span> {files.length} file(s)</p>}
               </div>
               <div className="flex justify-between pt-2">
                 <Button variant="outline" onClick={() => setStep(3)}>Back</Button>
-                <Button onClick={() => setSubmitted(true)} className="bg-gold text-navy hover:bg-gold/90 font-semibold">Submit Application</Button>
+                <Button onClick={handleSubmit} disabled={loading} className="bg-gold text-navy hover:bg-gold/90 font-semibold">
+                  {loading ? "Submitting..." : "Submit Application"}
+                </Button>
               </div>
             </div>
           )}
