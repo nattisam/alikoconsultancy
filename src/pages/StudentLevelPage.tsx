@@ -80,27 +80,30 @@ const StudentLevelPage = () => {
       </section>
 
       {/* Programs as Cards */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-warm">
         <div className="container-wide">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl font-bold text-primary mb-4">Available Programs</h2>
             <p className="text-muted-foreground max-w-xl mx-auto">Choose the program that best fits your academic goals.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {data.programs.map((p) => (
-              <div key={p.name} className="bg-card border border-border rounded-xl p-6 card-hover">
-                <h3 className="font-serif text-lg font-semibold text-primary mb-2">{p.name}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
+            {data.programs.map((p, i) => {
+              const styles = ["card-navy", "card-forest", "card-teal", "card-navy"];
+              return (
+                <div key={p.name} className={`${styles[i]} rounded-xl p-6 card-hover`}>
+                  <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-2">{p.name}</h3>
+                  <p className="text-primary-foreground/70 text-sm leading-relaxed">{p.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Requirements & Docs */}
-      <section className="section-padding bg-off-white">
+      <section className="section-padding bg-gradient-cool">
         <div className="container-wide grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-card border border-border rounded-xl p-8">
+          <div className="card-gold-subtle rounded-xl p-8">
             <h2 className="font-serif text-2xl font-bold text-primary mb-6">Minimum Requirements</h2>
             <ul className="space-y-3">
               {data.requirements.map((r) => (
@@ -111,7 +114,7 @@ const StudentLevelPage = () => {
               ))}
             </ul>
           </div>
-          <div className="bg-card border border-border rounded-xl p-8">
+          <div className="card-teal-subtle rounded-xl p-8">
             <h2 className="font-serif text-2xl font-bold text-primary mb-6">Documentation Checklist</h2>
             <ul className="space-y-3">
               {data.docs.map((d) => (

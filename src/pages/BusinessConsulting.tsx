@@ -4,10 +4,10 @@ import { TrendingUp, BarChart3, Target, Users, ArrowRight, CheckCircle2 } from "
 import pillarBusiness from "@/assets/pillar-business.jpg";
 
 const services = [
-  { icon: Target, title: "Market Entry Strategy", desc: "Navigate new markets with data-driven insights and proven frameworks." },
-  { icon: BarChart3, title: "Operational Excellence", desc: "Streamline processes and optimize performance across your organization." },
-  { icon: TrendingUp, title: "Growth & Scaling", desc: "Develop sustainable growth strategies tailored to your business stage." },
-  { icon: Users, title: "Team & Leadership", desc: "Build high-performing teams and develop leadership capabilities." },
+  { icon: Target, title: "Market Entry Strategy", desc: "Navigate new markets with data-driven insights and proven frameworks.", cardClass: "card-navy" },
+  { icon: BarChart3, title: "Operational Excellence", desc: "Streamline processes and optimize performance across your organization.", cardClass: "card-forest" },
+  { icon: TrendingUp, title: "Growth & Scaling", desc: "Develop sustainable growth strategies tailored to your business stage.", cardClass: "card-teal" },
+  { icon: Users, title: "Team & Leadership", desc: "Build high-performing teams and develop leadership capabilities.", cardClass: "card-navy" },
 ];
 
 const outcomes = [
@@ -44,7 +44,7 @@ const BusinessConsulting = () => (
     </section>
 
     {/* Services Grid */}
-    <section className="section-padding">
+    <section className="section-padding bg-gradient-warm">
       <div className="container-wide">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl font-bold text-primary mb-4">Our Services</h2>
@@ -52,12 +52,12 @@ const BusinessConsulting = () => (
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {services.map((s) => (
-            <div key={s.title} className="bg-card border border-border rounded-xl p-8 card-hover group">
-              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <div key={s.title} className={`${s.cardClass} rounded-xl p-8 card-hover group`}>
+              <div className="w-12 h-12 rounded-lg bg-primary-foreground/15 flex items-center justify-center mb-5">
                 <s.icon className="w-6 h-6 text-accent" />
               </div>
-              <h3 className="font-serif text-lg font-semibold text-primary mb-2">{s.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
+              <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-2">{s.title}</h3>
+              <p className="text-primary-foreground/70 text-sm leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -88,13 +88,24 @@ const BusinessConsulting = () => (
     </section>
 
     {/* Industries */}
-    <section className="section-padding">
+    <section className="section-padding bg-gradient-cool">
       <div className="container-wide">
-        <h2 className="font-serif text-3xl font-bold text-primary mb-4">Industries We Serve</h2>
-        <p className="text-muted-foreground mb-8">We bring cross-sector expertise to every engagement.</p>
-        <div className="flex flex-wrap gap-3">
-          {["Technology", "Healthcare", "Finance", "Retail", "Manufacturing", "Education", "Real Estate", "Non-Profit"].map((ind) => (
-            <span key={ind} className="px-5 py-2.5 bg-card border border-border rounded-full text-sm text-primary font-medium hover:border-accent transition-colors">{ind}</span>
+        <h2 className="font-serif text-3xl font-bold text-primary mb-4 text-center">Industries We Serve</h2>
+        <p className="text-muted-foreground mb-8 text-center max-w-xl mx-auto">We bring cross-sector expertise to every engagement.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[
+            { name: "Technology", style: "card-navy-subtle" },
+            { name: "Healthcare", style: "card-teal-subtle" },
+            { name: "Finance", style: "card-gold-subtle" },
+            { name: "Retail", style: "card-forest-subtle" },
+            { name: "Manufacturing", style: "card-navy-subtle" },
+            { name: "Education", style: "card-teal-subtle" },
+            { name: "Real Estate", style: "card-gold-subtle" },
+            { name: "Non-Profit", style: "card-forest-subtle" },
+          ].map((ind) => (
+            <div key={ind.name} className={`${ind.style} rounded-xl px-5 py-5 text-center card-hover`}>
+              <span className="text-sm font-semibold text-primary">{ind.name}</span>
+            </div>
           ))}
         </div>
       </div>

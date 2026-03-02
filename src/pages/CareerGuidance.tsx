@@ -4,10 +4,10 @@ import { UserCheck, BookOpen, Award, Compass, ArrowRight } from "lucide-react";
 import pillarCareer from "@/assets/pillar-career.jpg";
 
 const programs = [
-  { icon: UserCheck, title: "1-on-1 Mentorship", desc: "Personalized guidance from industry professionals aligned with your career goals." },
-  { icon: BookOpen, title: "Career Workshops", desc: "Hands-on workshops covering resume building, interview skills, and personal branding." },
-  { icon: Award, title: "Leadership Development", desc: "Structured programs designed to accelerate your professional growth and leadership potential." },
-  { icon: Compass, title: "Career Transition Support", desc: "Expert support for professionals navigating career changes or entering new industries." },
+  { icon: UserCheck, title: "1-on-1 Mentorship", desc: "Personalized guidance from industry professionals aligned with your career goals.", cardClass: "card-navy" },
+  { icon: BookOpen, title: "Career Workshops", desc: "Hands-on workshops covering resume building, interview skills, and personal branding.", cardClass: "card-forest" },
+  { icon: Award, title: "Leadership Development", desc: "Structured programs designed to accelerate your professional growth and leadership potential.", cardClass: "card-teal" },
+  { icon: Compass, title: "Career Transition Support", desc: "Expert support for professionals navigating career changes or entering new industries.", cardClass: "card-navy" },
 ];
 
 const successMetrics = [
@@ -56,7 +56,7 @@ const CareerGuidance = () => (
     </section>
 
     {/* Programs */}
-    <section className="section-padding">
+    <section className="section-padding bg-gradient-warm">
       <div className="container-wide">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl font-bold text-primary mb-4">Programs & Services</h2>
@@ -64,12 +64,12 @@ const CareerGuidance = () => (
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {programs.map((p) => (
-            <div key={p.title} className="bg-card border border-border rounded-xl p-8 card-hover group">
-              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <div key={p.title} className={`${p.cardClass} rounded-xl p-8 card-hover group`}>
+              <div className="w-12 h-12 rounded-lg bg-primary-foreground/15 flex items-center justify-center mb-5">
                 <p.icon className="w-6 h-6 text-accent" />
               </div>
-              <h3 className="font-serif text-lg font-semibold text-primary mb-2">{p.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{p.desc}</p>
+              <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-2">{p.title}</h3>
+              <p className="text-primary-foreground/70 text-sm leading-relaxed">{p.desc}</p>
             </div>
           ))}
         </div>

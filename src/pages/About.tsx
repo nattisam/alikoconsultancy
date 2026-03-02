@@ -4,10 +4,10 @@ import { Heart, Globe, Award, Users } from "lucide-react";
 import aboutTeam from "@/assets/about-team.jpg";
 
 const values = [
-  { icon: Heart, title: "Client-Centered", desc: "Every decision we make starts with your goals." },
-  { icon: Globe, title: "Globally Connected", desc: "Partnerships and insights spanning continents." },
-  { icon: Award, title: "Excellence Driven", desc: "We hold ourselves to the highest professional standards." },
-  { icon: Users, title: "Approachable Expertise", desc: "Premium guidance that feels personal and human." },
+  { icon: Heart, title: "Client-Centered", desc: "Every decision we make starts with your goals.", style: "card-navy-subtle" },
+  { icon: Globe, title: "Globally Connected", desc: "Partnerships and insights spanning continents.", style: "card-gold-subtle" },
+  { icon: Award, title: "Excellence Driven", desc: "We hold ourselves to the highest professional standards.", style: "card-teal-subtle" },
+  { icon: Users, title: "Approachable Expertise", desc: "Premium guidance that feels personal and human.", style: "card-forest-subtle" },
 ];
 
 const About = () => (
@@ -49,15 +49,15 @@ const About = () => (
     <section className="section-padding bg-warm-beige">
       <div className="container-wide">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-card border border-border rounded-xl p-10">
-            <h3 className="font-serif text-xl font-semibold text-primary mb-4">Our Mission</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+          <div className="card-navy rounded-xl p-10">
+            <h3 className="font-serif text-xl font-semibold text-primary-foreground mb-4">Our Mission</h3>
+            <p className="text-primary-foreground/70 text-sm leading-relaxed">
               To provide world-class consultancy services that empower individuals and organizations to achieve their goals with clarity, confidence, and lasting impact.
             </p>
           </div>
-          <div className="bg-card border border-border rounded-xl p-10">
-            <h3 className="font-serif text-xl font-semibold text-primary mb-4">Our Vision</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+          <div className="card-forest rounded-xl p-10">
+            <h3 className="font-serif text-xl font-semibold text-primary-foreground mb-4">Our Vision</h3>
+            <p className="text-primary-foreground/70 text-sm leading-relaxed">
               To be the most trusted consultancy partner for those seeking to transform their businesses, careers, and global journeys.
             </p>
           </div>
@@ -66,13 +66,13 @@ const About = () => (
     </section>
 
     {/* Values */}
-    <section className="section-padding bg-off-white">
+    <section className="section-padding bg-gradient-cool">
       <div className="container-wide">
         <h2 className="font-serif text-3xl font-bold text-primary mb-10 text-center">Our Values</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {values.map((v) => (
-            <div key={v.title} className="bg-card border border-border rounded-xl p-6 text-center card-hover">
-              <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+            <div key={v.title} className={`${v.style} rounded-xl p-6 text-center card-hover`}>
+              <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-4">
                 <v.icon className="w-6 h-6 text-accent" />
               </div>
               <h3 className="font-serif text-lg font-semibold text-primary mb-2">{v.title}</h3>

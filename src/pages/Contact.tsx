@@ -38,18 +38,21 @@ const Contact = () => {
       </section>
 
       {/* Contact Info Cards */}
-      <section className="bg-off-white">
+      <section className="bg-gradient-warm">
         <div className="container-wide py-8 md:py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {contactInfo.map((c) => (
-              <div key={c.title} className="bg-card border border-border rounded-xl p-5 text-center">
-                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mx-auto mb-3">
-                  <c.icon className="w-5 h-5 text-accent" />
+            {contactInfo.map((c, i) => {
+              const styles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+              return (
+                <div key={c.title} className={`${styles[i]} rounded-xl p-5 text-center card-hover`}>
+                  <div className="w-10 h-10 rounded-lg bg-accent/15 flex items-center justify-center mx-auto mb-3">
+                    <c.icon className="w-5 h-5 text-accent" />
+                  </div>
+                  <p className="font-semibold text-sm text-primary mb-1">{c.title}</p>
+                  <p className="text-muted-foreground text-xs">{c.detail}</p>
                 </div>
-                <p className="font-semibold text-sm text-primary mb-1">{c.title}</p>
-                <p className="text-muted-foreground text-xs">{c.detail}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

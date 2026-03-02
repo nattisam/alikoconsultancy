@@ -43,8 +43,10 @@ const ApplicationStatus = () => {
 
           {searched && (
             <div className="max-w-md mx-auto text-center">
-              <div className="bg-off-white rounded-xl p-8">
-                <Clock className="w-10 h-10 text-accent mx-auto mb-4" />
+              <div className="card-gold-subtle rounded-xl p-8">
+                <div className="w-14 h-14 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-4">
+                  <Clock className="w-7 h-7 text-accent" />
+                </div>
                 <h3 className="font-serif text-lg font-semibold text-primary mb-2">Application Under Review</h3>
                 <p className="text-muted-foreground text-sm mb-1">Code: <span className="font-mono font-bold">{code}</span></p>
                 <p className="text-muted-foreground text-sm mb-6">Our team is reviewing your submission. You will be notified of any updates via email.</p>
