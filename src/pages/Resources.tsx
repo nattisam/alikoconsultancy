@@ -2,18 +2,20 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { FileText, BookOpen, CheckSquare, Download } from "lucide-react";
 import resourcesThumb from "@/assets/resources-thumb.jpg";
-import resourceTemplate from "@/assets/resource-template.jpg";
-import resourceGuide from "@/assets/resource-guide.jpg";
-import resourceChecklist from "@/assets/resource-checklist.jpg";
-import resourceArticle from "@/assets/resource-article.jpg";
+import resBusinessPlan from "@/assets/res-business-plan.jpg";
+import resCareerTransition from "@/assets/res-career-transition.jpg";
+import resStudyAbroad from "@/assets/res-study-abroad.jpg";
+import resVisaGuide from "@/assets/res-visa-guide.jpg";
+import resInterviewPrep from "@/assets/res-interview-prep.jpg";
+import resMarketEntry from "@/assets/res-market-entry.jpg";
 
 const sampleResources = [
-  { title: "Business Plan Template", type: "Template", category: "Business", summary: "A comprehensive template to structure your business plan for investors and stakeholders." },
-  { title: "Career Transition Guide", type: "Guide", category: "Career", summary: "Step-by-step guide for professionals navigating a career change or industry switch." },
-  { title: "Study Abroad Checklist", type: "Checklist", category: "Travel", summary: "Everything you need to prepare for your study abroad journey, organized by timeline." },
-  { title: "Visa Application Guide", type: "Guide", category: "Travel", summary: "Detailed walkthrough of the visa application process for popular study destinations." },
-  { title: "Interview Preparation Kit", type: "Guide", category: "Career", summary: "Proven strategies and frameworks to ace your next job or admissions interview." },
-  { title: "Market Entry Strategy", type: "Article", category: "Business", summary: "How to evaluate and enter new markets with a data-driven approach." },
+  { title: "Business Plan Template", type: "Template", category: "Business", summary: "A comprehensive template to structure your business plan for investors and stakeholders.", image: resBusinessPlan },
+  { title: "Career Transition Guide", type: "Guide", category: "Career", summary: "Step-by-step guide for professionals navigating a career change or industry switch.", image: resCareerTransition },
+  { title: "Study Abroad Checklist", type: "Checklist", category: "Travel", summary: "Everything you need to prepare for your study abroad journey, organized by timeline.", image: resStudyAbroad },
+  { title: "Visa Application Guide", type: "Guide", category: "Travel", summary: "Detailed walkthrough of the visa application process for popular study destinations.", image: resVisaGuide },
+  { title: "Interview Preparation Kit", type: "Guide", category: "Career", summary: "Proven strategies and frameworks to ace your next job or admissions interview.", image: resInterviewPrep },
+  { title: "Market Entry Strategy", type: "Article", category: "Business", summary: "How to evaluate and enter new markets with a data-driven approach.", image: resMarketEntry },
 ];
 
 const typeIcons: Record<string, typeof FileText> = {
@@ -21,13 +23,6 @@ const typeIcons: Record<string, typeof FileText> = {
   Guide: BookOpen,
   Checklist: CheckSquare,
   Article: FileText,
-};
-
-const typeThumbnails: Record<string, string> = {
-  Template: resourceTemplate,
-  Guide: resourceGuide,
-  Checklist: resourceChecklist,
-  Article: resourceArticle,
 };
 
 const categoryColors: Record<string, string> = {
@@ -57,11 +52,10 @@ const Resources = () => (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {sampleResources.map((r) => {
             const Icon = typeIcons[r.type] || FileText;
-            const thumb = typeThumbnails[r.type] || resourcesThumb;
             return (
               <div key={r.title} className="bg-card border border-border rounded-xl overflow-hidden card-hover group">
                 <div className="aspect-[16/9] bg-muted overflow-hidden">
-                  <img src={thumb} alt={r.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" loading="lazy" />
+                  <img src={r.image} alt={r.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" loading="lazy" />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">
