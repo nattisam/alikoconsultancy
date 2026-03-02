@@ -5,17 +5,17 @@ import pillarTravel from "@/assets/pillar-travel.jpg";
 import studentTravel from "@/assets/student-travel.jpg";
 
 const categories = [
-  { icon: GraduationCap, title: "Student Travel", desc: "Study abroad guidance for all academic levels. Visa, applications, and enrollment support.", href: "/travel-advisory/undergraduate" },
-  { icon: Users, title: "Visitor Travel", desc: "Tourist and family visit visa consulting, travel planning, and itinerary support.", href: "/contact" },
-  { icon: Briefcase, title: "Business Travel", desc: "Corporate relocation, work permits, and business visa advisory services.", href: "/contact" },
-  { icon: Globe, title: "Other Travel Consulting", desc: "Immigration consultations, cultural transition support, and custom advisory.", href: "/contact" },
+  { icon: GraduationCap, title: "Student Travel", desc: "Study abroad guidance for all academic levels. Visa, applications, and enrollment support.", href: "/travel-advisory/undergraduate", cardClass: "card-navy" },
+  { icon: Users, title: "Visitor Travel", desc: "Tourist and family visit visa consulting, travel planning, and itinerary support.", href: "/contact", cardClass: "card-forest" },
+  { icon: Briefcase, title: "Business Travel", desc: "Corporate relocation, work permits, and business visa advisory services.", href: "/contact", cardClass: "card-teal" },
+  { icon: Globe, title: "Other Travel Consulting", desc: "Immigration consultations, cultural transition support, and custom advisory.", href: "/contact", cardClass: "card-navy" },
 ];
 
 const levels = [
-  { title: "High School", href: "/travel-advisory/high-school", desc: "Boarding school and exchange program support." },
-  { title: "Undergraduate", href: "/travel-advisory/undergraduate", desc: "University admissions and scholarship guidance." },
-  { title: "Graduate", href: "/travel-advisory/graduate", desc: "Master's programs, research opportunities, and funding." },
-  { title: "PhD", href: "/travel-advisory/phd", desc: "Doctoral program applications and research placements." },
+  { title: "High School", href: "/travel-advisory/high-school", desc: "Boarding school and exchange program support.", style: "card-navy-subtle" },
+  { title: "Undergraduate", href: "/travel-advisory/undergraduate", desc: "University admissions and scholarship guidance.", style: "card-gold-subtle" },
+  { title: "Graduate", href: "/travel-advisory/graduate", desc: "Master's programs, research opportunities, and funding.", style: "card-teal-subtle" },
+  { title: "PhD", href: "/travel-advisory/phd", desc: "Doctoral program applications and research placements.", style: "card-forest-subtle" },
 ];
 
 const TravelAdvisory = () => (
@@ -44,7 +44,7 @@ const TravelAdvisory = () => (
     </section>
 
     {/* Travel Categories */}
-    <section className="section-padding">
+    <section className="section-padding bg-gradient-warm">
       <div className="container-wide">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl font-bold text-primary mb-4">Travel Categories</h2>
@@ -52,12 +52,12 @@ const TravelAdvisory = () => (
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {categories.map((c) => (
-            <Link key={c.title} to={c.href} className="bg-card border border-border rounded-xl p-8 card-hover group">
-              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+            <Link key={c.title} to={c.href} className={`${c.cardClass} rounded-xl p-8 card-hover group`}>
+              <div className="w-12 h-12 rounded-lg bg-primary-foreground/15 flex items-center justify-center mb-5">
                 <c.icon className="w-6 h-6 text-accent" />
               </div>
-              <h3 className="font-serif text-lg font-semibold text-primary mb-2">{c.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-4">{c.desc}</p>
+              <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-2">{c.title}</h3>
+              <p className="text-primary-foreground/70 text-sm leading-relaxed mb-4">{c.desc}</p>
               <span className="inline-flex items-center gap-2 text-sm font-medium text-accent group-hover:gap-3 transition-all">
                 Learn More <ArrowRight className="w-4 h-4" />
               </span>
@@ -76,7 +76,7 @@ const TravelAdvisory = () => (
             <p className="text-muted-foreground mb-8">Tailored support for every stage of your academic journey.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {levels.map((l) => (
-                <Link key={l.title} to={l.href} className="bg-card border border-border rounded-xl p-5 card-hover group">
+                <Link key={l.title} to={l.href} className={`${l.style} rounded-xl p-5 card-hover group`}>
                   <h3 className="font-serif text-lg font-semibold text-primary mb-1">{l.title}</h3>
                   <p className="text-muted-foreground text-sm mb-3">{l.desc}</p>
                   <span className="text-sm font-medium text-accent">Explore <ArrowRight className="inline w-3 h-3" /></span>

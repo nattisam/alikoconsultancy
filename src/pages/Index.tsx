@@ -144,23 +144,23 @@ const Index = () => {
       </section>
 
       {/* Who We Serve */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-cool">
         <div className="container-wide">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-4">Who We Serve</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { title: "Entrepreneurs & SMEs", desc: "Strategic business consulting to help you launch, grow, and scale your ventures with confidence.", icon: Briefcase },
-              { title: "Students & Job Seekers", desc: "Career guidance, mentorship programs, and study abroad support to unlock your full potential.", icon: GraduationCap },
-              { title: "Travelers & Families", desc: "Comprehensive travel advisory for visas, relocation, and international transitions.", icon: Plane },
+              { title: "Entrepreneurs & SMEs", desc: "Strategic business consulting to help you launch, grow, and scale your ventures with confidence.", icon: Briefcase, cardClass: "card-navy", iconBg: "bg-gold/20" },
+              { title: "Students & Job Seekers", desc: "Career guidance, mentorship programs, and study abroad support to unlock your full potential.", icon: GraduationCap, cardClass: "card-forest", iconBg: "bg-accent/20" },
+              { title: "Travelers & Families", desc: "Comprehensive travel advisory for visas, relocation, and international transitions.", icon: Plane, cardClass: "card-teal", iconBg: "bg-primary-foreground/20" },
             ].map((item) => (
-              <div key={item.title} className="bg-card border border-border rounded-xl p-8 text-center card-hover">
-                <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-5">
-                  <item.icon className="w-6 h-6 text-accent" />
+              <div key={item.title} className={`${item.cardClass} rounded-xl p-8 text-center card-hover`}>
+                <div className={`w-14 h-14 rounded-full ${item.iconBg} flex items-center justify-center mx-auto mb-5`}>
+                  <item.icon className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-primary mb-3">{item.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="font-serif text-lg font-semibold mb-3">{item.title}</h3>
+                <p className="text-sm leading-relaxed opacity-80">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -177,18 +177,21 @@ const Index = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {processSteps.map((step, i) => (
-              <div key={step.title} className="text-center">
-                <div className="w-14 h-14 rounded-full bg-navy flex items-center justify-center mx-auto mb-5">
-                  <step.icon className="w-6 h-6 text-accent" />
+            {processSteps.map((step, i) => {
+              const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+              return (
+                <div key={step.title} className={`${cardStyles[i]} rounded-xl p-6 text-center card-hover`}>
+                  <div className="w-14 h-14 rounded-full bg-navy flex items-center justify-center mx-auto mb-5">
+                    <step.icon className="w-6 h-6 text-accent" />
+                  </div>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-accent mb-2 block">
+                    Step {i + 1}
+                  </span>
+                  <h3 className="font-serif text-lg font-semibold text-primary mb-2">{step.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-accent mb-2 block">
-                  Step {i + 1}
-                </span>
-                <h3 className="font-serif text-lg font-semibold text-primary mb-2">{step.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

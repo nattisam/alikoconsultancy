@@ -45,30 +45,33 @@ const FAQ = () => (
       </div>
     </section>
 
-    <section className="section-padding">
+    <section className="section-padding bg-gradient-warm">
       <div className="container-narrow">
-        {faqGroups.map((group) => (
-          <div key={group.category} className="mb-10 last:mb-0">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                <HelpCircle className="w-4 h-4 text-accent" />
+        {faqGroups.map((group, gi) => {
+          const headerStyles = ["card-navy", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+          return (
+            <div key={group.category} className="mb-10 last:mb-0">
+              <div className={`${headerStyles[gi]} rounded-xl px-5 py-3 flex items-center gap-3 mb-5`}>
+                <div className={`w-8 h-8 rounded-lg ${gi === 0 ? 'bg-primary-foreground/15' : 'bg-accent/15'} flex items-center justify-center`}>
+                  <HelpCircle className={`w-4 h-4 ${gi === 0 ? 'text-accent' : 'text-accent'}`} />
+                </div>
+                <h2 className={`font-serif text-xl font-bold ${gi === 0 ? 'text-primary-foreground' : 'text-primary'}`}>{group.category}</h2>
               </div>
-              <h2 className="font-serif text-xl font-bold text-primary">{group.category}</h2>
+              <Accordion type="single" collapsible className="space-y-3">
+                {group.items.map((faq, i) => (
+                  <AccordionItem key={i} value={`${group.category}-${i}`} className="border border-border rounded-xl px-6 bg-card">
+                    <AccordionTrigger className="text-left font-serif text-base font-semibold text-primary hover:no-underline py-5">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-sm leading-relaxed pb-5">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
-            <Accordion type="single" collapsible className="space-y-3">
-              {group.items.map((faq, i) => (
-                <AccordionItem key={i} value={`${group.category}-${i}`} className="border border-border rounded-xl px-6 bg-card">
-                  <AccordionTrigger className="text-left font-serif text-base font-semibold text-primary hover:no-underline py-5">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground text-sm leading-relaxed pb-5">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
 
