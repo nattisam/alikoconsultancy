@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase, Users, Globe, ArrowRight } from "lucide-react";
 import pillarTravel from "@/assets/pillar-travel.jpg";
-import studentTravel from "@/assets/student-travel.jpg";
+import bgHighschool from "@/assets/bg-highschool.jpg";
+import bgUndergraduate from "@/assets/bg-undergraduate.jpg";
+import bgGraduate from "@/assets/bg-graduate.jpg";
+import bgPhd from "@/assets/bg-phd.jpg";
 
 const categories = [
   { icon: GraduationCap, title: "Student Travel", desc: "Study abroad guidance for all academic levels. Visa, applications, and enrollment support.", href: "/travel-advisory/undergraduate", cardClass: "card-navy" },
@@ -12,10 +15,10 @@ const categories = [
 ];
 
 const levels = [
-  { title: "High School", href: "/travel-advisory/high-school", desc: "Boarding school and exchange program support.", style: "card-navy-subtle" },
-  { title: "Undergraduate", href: "/travel-advisory/undergraduate", desc: "University admissions and scholarship guidance.", style: "card-gold-subtle" },
-  { title: "Graduate", href: "/travel-advisory/graduate", desc: "Master's programs, research opportunities, and funding.", style: "card-teal-subtle" },
-  { title: "PhD", href: "/travel-advisory/phd", desc: "Doctoral program applications and research placements.", style: "card-forest-subtle" },
+  { title: "High School", href: "/travel-advisory/high-school", desc: "Boarding school and exchange program support.", image: bgHighschool },
+  { title: "Undergraduate", href: "/travel-advisory/undergraduate", desc: "University admissions and scholarship guidance.", image: bgUndergraduate },
+  { title: "Graduate", href: "/travel-advisory/graduate", desc: "Master's programs, research opportunities, and funding.", image: bgGraduate },
+  { title: "PhD", href: "/travel-advisory/phd", desc: "Doctoral advisory and research guidance.", image: bgPhd },
 ];
 
 const TravelAdvisory = () => (
@@ -70,23 +73,25 @@ const TravelAdvisory = () => (
     {/* Student Levels with Image */}
     <section className="section-padding bg-off-white">
       <div className="container-wide">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
-          <div>
-            <h2 className="font-serif text-3xl font-bold text-primary mb-4">Student Academic Levels</h2>
-            <p className="text-muted-foreground mb-8">Tailored support for every stage of your academic journey.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {levels.map((l) => (
-                <Link key={l.title} to={l.href} className={`${l.style} rounded-xl p-5 card-hover group`}>
-                  <h3 className="font-serif text-lg font-semibold text-primary mb-1">{l.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-3">{l.desc}</p>
-                  <span className="text-sm font-medium text-accent">Explore <ArrowRight className="inline w-3 h-3" /></span>
-                </Link>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-xl overflow-hidden shadow-lg">
-            <img src={studentTravel} alt="Student studying abroad" className="w-full h-full object-cover" loading="lazy" />
-          </div>
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">Student Academic Levels</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">Tailored support for every stage of your academic journey.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {levels.map((l) => (
+            <Link key={l.title} to={l.href} className="bg-card border border-border rounded-xl overflow-hidden card-hover group">
+              <div className="aspect-[16/10] overflow-hidden">
+                <img src={l.image} alt={l.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+              </div>
+              <div className="p-5">
+                <h3 className="font-serif text-lg font-semibold text-primary mb-1">{l.title}</h3>
+                <p className="text-muted-foreground text-sm mb-3">{l.desc}</p>
+                <span className="inline-flex items-center gap-2 text-sm font-medium text-accent group-hover:gap-3 transition-all">
+                  Explore <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
