@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { FileText, BookOpen, CheckSquare, Download, ArrowRight } from "lucide-react";
+import { FileText, BookOpen, CheckSquare, Download } from "lucide-react";
 import resourcesThumb from "@/assets/resources-thumb.jpg";
+import resourceTemplate from "@/assets/resource-template.jpg";
+import resourceGuide from "@/assets/resource-guide.jpg";
+import resourceChecklist from "@/assets/resource-checklist.jpg";
+import resourceArticle from "@/assets/resource-article.jpg";
 
 const sampleResources = [
   { title: "Business Plan Template", type: "Template", category: "Business", summary: "A comprehensive template to structure your business plan for investors and stakeholders." },
@@ -17,6 +21,13 @@ const typeIcons: Record<string, typeof FileText> = {
   Guide: BookOpen,
   Checklist: CheckSquare,
   Article: FileText,
+};
+
+const typeThumbnails: Record<string, string> = {
+  Template: resourceTemplate,
+  Guide: resourceGuide,
+  Checklist: resourceChecklist,
+  Article: resourceArticle,
 };
 
 const categoryColors: Record<string, string> = {
@@ -46,15 +57,16 @@ const Resources = () => (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {sampleResources.map((r) => {
             const Icon = typeIcons[r.type] || FileText;
+            const thumb = typeThumbnails[r.type] || resourcesThumb;
             return (
               <div key={r.title} className="bg-card border border-border rounded-xl overflow-hidden card-hover group">
                 <div className="aspect-[16/9] bg-muted overflow-hidden">
-                  <img src={resourcesThumb} alt={r.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity" loading="lazy" />
+                  <img src={thumb} alt={r.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" loading="lazy" />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <span className={`text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${categoryColors[r.category] || "bg-muted text-muted-foreground"}`}>{r.category}</span>
-                    <span className="text-xs text-muted-foreground">{r.type}</span>
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground"><Icon className="w-3 h-3" />{r.type}</span>
                   </div>
                   <h3 className="font-serif text-lg font-semibold text-primary mb-2">{r.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed mb-4">{r.summary}</p>
