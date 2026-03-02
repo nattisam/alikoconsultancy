@@ -68,33 +68,41 @@ const Resources = () => {
           ) : resources.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">No resources available yet. Check back soon!</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {resources.map((r) => {
                 const Icon = typeIcons[r.resource_type] || FileText;
                 return (
-                  <div key={r.id} className="bg-card border border-border rounded-xl overflow-hidden card-hover group">
-                    {r.thumbnail_url && (
-                      <div className="aspect-[16/9] bg-muted overflow-hidden">
-                        <img src={r.thumbnail_url} alt={r.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" loading="lazy" />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
+                  <div key={r.id} className="group bg-card rounded-xl overflow-hidden border border-border card-hover">
+                    <div className="aspect-[16/10] overflow-hidden bg-muted">
+                      <img
+                        src={r.thumbnail_url || resourcesThumb}
+                        alt={r.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="p-6 lg:p-8">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                          <Icon className="w-4 h-4 text-accent" />
+                        </div>
                         {r.consultation_type && (
                           <span className={`text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${categoryColors[r.consultation_type] || "bg-muted text-muted-foreground"}`}>{r.consultation_type}</span>
                         )}
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground capitalize"><Icon className="w-3 h-3" />{r.resource_type}</span>
+                        <span className="text-xs text-muted-foreground capitalize">{r.resource_type}</span>
                       </div>
-                      <h3 className="font-serif text-lg font-semibold text-primary mb-2">{r.title}</h3>
-                      {r.description && <p className="text-muted-foreground text-sm leading-relaxed mb-4">{r.description}</p>}
+                      <h3 className="font-serif text-xl font-semibold text-primary mb-3">{r.title}</h3>
+                      {r.description && <p className="text-muted-foreground text-sm leading-relaxed mb-5">{r.description}</p>}
                       {r.file_url ? (
-                        <a href={r.file_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-accent group-hover:gap-3 transition-all">
-                          <Download className="w-4 h-4" /> Download Resource
+                        <a href={r.file_url} target="_blank" rel="noopener noreferrer">
+                          <Button className="bg-gold text-navy hover:bg-gold/90 font-semibold px-6 py-5 w-full">
+                            <Download className="w-4 h-4 mr-2" /> Access Material
+                          </Button>
                         </a>
                       ) : (
-                        <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                          <FileText className="w-4 h-4" /> Coming soon
-                        </span>
+                        <Button variant="outline" className="w-full py-5 cursor-default opacity-60" disabled>
+                          <FileText className="w-4 h-4 mr-2" /> Coming Soon
+                        </Button>
                       )}
                     </div>
                   </div>
