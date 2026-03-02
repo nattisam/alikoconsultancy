@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Briefcase, GraduationCap, Plane, ArrowRight, Phone, ClipboardCheck, Users, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -55,18 +56,37 @@ const stats = [
 ];
 
 const Index = () => {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const onCanPlay = () => setVideoLoaded(true);
+    video.addEventListener("canplaythrough", onCanPlay);
+    if (video.readyState >= 4) setVideoLoaded(true);
+    return () => video.removeEventListener("canplaythrough", onCanPlay);
+  }, []);
+
   return (
     <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[90vh] flex items-center">
+        {/* Static poster shown instantly */}
+        <img
+          src={heroBg}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${videoLoaded ? "opacity-0" : "opacity-100"}`}
+        />
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
-          preload="auto"
-          poster={heroBg}
-          className="absolute inset-0 w-full h-full object-cover"
+          preload="metadata"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${videoLoaded ? "opacity-100" : "opacity-0"}`}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
