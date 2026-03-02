@@ -245,7 +245,7 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/apply">
-              <Button variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 py-6">
+              <Button variant="outline" className="border-accent text-accent hover:text-accent hover:bg-accent/10 text-base px-8 py-6">
                 Apply Now
               </Button>
             </Link>
