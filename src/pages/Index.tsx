@@ -70,7 +70,7 @@ const Index = () => {
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-navy/50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-[hsl(0,60%,15%)]/50 to-[hsl(43,76%,41%)]/30" />
         <div className="relative container-wide px-4 lg:px-8 py-24 md:py-32 lg:py-40">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6 animate-fade-in">
