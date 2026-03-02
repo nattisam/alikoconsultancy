@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Briefcase, GraduationCap, Plane, ArrowRight, Phone, ClipboardCheck, Users, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
+import heroVideo from "@/assets/hero-video.mp4";
 import pillarBusiness from "@/assets/pillar-business.jpg";
 import pillarCareer from "@/assets/pillar-career.jpg";
 import pillarTravel from "@/assets/pillar-travel.jpg";
@@ -57,12 +58,18 @@ const Index = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBg})` }}
-        />
-        <div className="absolute inset-0 bg-navy/80" />
+      <section className="relative overflow-hidden min-h-[90vh] flex items-center">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={heroBg}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-navy/75" />
         <div className="relative container-wide px-4 lg:px-8 py-24 md:py-32 lg:py-40">
           <div className="max-w-3xl">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6 animate-fade-in">
