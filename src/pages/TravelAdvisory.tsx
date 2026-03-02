@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase, Users, Globe, ArrowRight } from "lucide-react";
+import pillarTravel from "@/assets/pillar-travel.jpg";
+import studentTravel from "@/assets/student-travel.jpg";
 
 const categories = [
   { icon: GraduationCap, title: "Student Travel", desc: "Study abroad guidance for all academic levels. Visa, applications, and enrollment support.", href: "/travel-advisory/undergraduate" },
@@ -18,10 +20,13 @@ const levels = [
 
 const TravelAdvisory = () => (
   <div>
-    <section className="bg-navy section-padding">
-      <div className="container-wide">
+    {/* Hero with Image */}
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${pillarTravel})` }} />
+      <div className="absolute inset-0 bg-navy/85" />
+      <div className="relative container-wide px-4 lg:px-8 py-20 md:py-28 lg:py-36">
         <div className="max-w-3xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-gold mb-4 block">Travel Advisory</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-accent mb-4 block">Travel Advisory</span>
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
             Your Global Journey, Simplified
           </h1>
@@ -38,13 +43,19 @@ const TravelAdvisory = () => (
       </div>
     </section>
 
+    {/* Travel Categories */}
     <section className="section-padding">
       <div className="container-wide">
-        <h2 className="font-serif text-3xl font-bold text-primary mb-10">Travel Categories</h2>
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">Travel Categories</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">Specialized services for every type of international journey.</p>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {categories.map((c) => (
             <Link key={c.title} to={c.href} className="bg-card border border-border rounded-xl p-8 card-hover group">
-              <c.icon className="w-8 h-8 text-gold mb-4" />
+              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+                <c.icon className="w-6 h-6 text-accent" />
+              </div>
               <h3 className="font-serif text-lg font-semibold text-primary mb-2">{c.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed mb-4">{c.desc}</p>
               <span className="inline-flex items-center gap-2 text-sm font-medium text-accent group-hover:gap-3 transition-all">
@@ -56,24 +67,35 @@ const TravelAdvisory = () => (
       </div>
     </section>
 
+    {/* Student Levels with Image */}
     <section className="section-padding bg-off-white">
       <div className="container-wide">
-        <h2 className="font-serif text-3xl font-bold text-primary mb-4">Student Academic Levels</h2>
-        <p className="text-muted-foreground mb-8">Tailored support for every stage of your academic journey.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {levels.map((l) => (
-            <Link key={l.title} to={l.href} className="bg-card border border-border rounded-xl p-6 card-hover group text-center">
-              <h3 className="font-serif text-lg font-semibold text-primary mb-2">{l.title}</h3>
-              <p className="text-muted-foreground text-sm mb-4">{l.desc}</p>
-              <span className="text-sm font-medium text-accent">Explore <ArrowRight className="inline w-3 h-3" /></span>
-            </Link>
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
+          <div>
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">Student Academic Levels</h2>
+            <p className="text-muted-foreground mb-8">Tailored support for every stage of your academic journey.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {levels.map((l) => (
+                <Link key={l.title} to={l.href} className="bg-card border border-border rounded-xl p-5 card-hover group">
+                  <h3 className="font-serif text-lg font-semibold text-primary mb-1">{l.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-3">{l.desc}</p>
+                  <span className="text-sm font-medium text-accent">Explore <ArrowRight className="inline w-3 h-3" /></span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-xl overflow-hidden shadow-lg">
+            <img src={studentTravel} alt="Student studying abroad" className="w-full h-full object-cover" loading="lazy" />
+          </div>
         </div>
       </div>
     </section>
 
-    <section className="bg-navy section-padding">
-      <div className="container-narrow text-center">
+    {/* CTA */}
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-navy" />
+      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--gold)) 1px, transparent 0)", backgroundSize: "40px 40px" }} />
+      <div className="relative container-narrow text-center section-padding">
         <h2 className="font-serif text-3xl font-bold text-primary-foreground mb-4">Start Your Travel Process</h2>
         <p className="text-primary-foreground/70 mb-8">Submit an application or send us a quick inquiry.</p>
         <div className="flex flex-wrap justify-center gap-4">
