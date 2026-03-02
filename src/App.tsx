@@ -3,7 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Layout from "@/components/layout/Layout";
+import AdminLayout from "@/components/admin/AdminLayout";
 import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import BusinessConsulting from "./pages/BusinessConsulting";
@@ -20,6 +22,16 @@ import ApplicationStatus from "./pages/ApplicationStatus";
 import FAQ from "./pages/FAQ";
 import { Privacy, Terms, Refund, Cookies } from "./pages/LegalPages";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminApplications from "./pages/admin/AdminApplications";
+import AdminResources from "./pages/admin/AdminResources";
+import AdminWebinars from "./pages/admin/AdminWebinars";
+import AdminTestimonials from "./pages/admin/AdminTestimonials";
+import AdminPages from "./pages/admin/AdminPages";
+import AdminContacts from "./pages/admin/AdminContacts";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -29,29 +41,46 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollToTop />
-        <Layout>
+        <AuthProvider>
+          <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/business-consulting" element={<BusinessConsulting />} />
-            <Route path="/career-guidance" element={<CareerGuidance />} />
-            <Route path="/travel-advisory" element={<TravelAdvisory />} />
-            <Route path="/travel-advisory/:level" element={<StudentLevelPage />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/webinars" element={<Webinars />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/book" element={<BookConsultation />} />
-            <Route path="/apply" element={<Apply />} />
-            <Route path="/application-status" element={<ApplicationStatus />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/refund" element={<Refund />} />
-            <Route path="/cookies" element={<Cookies />} />
-            <Route path="*" element={<NotFound />} />
+            {/* Public routes */}
+            <Route element={<Layout><></></Layout>} />
+            <Route path="/" element={<Layout><Index /></Layout>} />
+            <Route path="/business-consulting" element={<Layout><BusinessConsulting /></Layout>} />
+            <Route path="/career-guidance" element={<Layout><CareerGuidance /></Layout>} />
+            <Route path="/travel-advisory" element={<Layout><TravelAdvisory /></Layout>} />
+            <Route path="/travel-advisory/:level" element={<Layout><StudentLevelPage /></Layout>} />
+            <Route path="/resources" element={<Layout><Resources /></Layout>} />
+            <Route path="/webinars" element={<Layout><Webinars /></Layout>} />
+            <Route path="/about" element={<Layout><About /></Layout>} />
+            <Route path="/contact" element={<Layout><Contact /></Layout>} />
+            <Route path="/book" element={<Layout><BookConsultation /></Layout>} />
+            <Route path="/apply" element={<Layout><Apply /></Layout>} />
+            <Route path="/application-status" element={<Layout><ApplicationStatus /></Layout>} />
+            <Route path="/faq" element={<Layout><FAQ /></Layout>} />
+            <Route path="/privacy" element={<Layout><Privacy /></Layout>} />
+            <Route path="/terms" element={<Layout><Terms /></Layout>} />
+            <Route path="/refund" element={<Layout><Refund /></Layout>} />
+            <Route path="/cookies" element={<Layout><Cookies /></Layout>} />
+
+            {/* Admin routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="bookings" element={<AdminBookings />} />
+              <Route path="applications" element={<AdminApplications />} />
+              <Route path="resources" element={<AdminResources />} />
+              <Route path="webinars" element={<AdminWebinars />} />
+              <Route path="testimonials" element={<AdminTestimonials />} />
+              <Route path="pages" element={<AdminPages />} />
+              <Route path="contacts" element={<AdminContacts />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+
+            <Route path="*" element={<Layout><NotFound /></Layout>} />
           </Routes>
-        </Layout>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

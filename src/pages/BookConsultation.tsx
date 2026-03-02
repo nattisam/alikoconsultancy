@@ -6,25 +6,68 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
 
 const timeSlots = ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"];
+
+const parseTime = (t: string) => {
+  const [time, period] = t.split(" ");
+  let [h, m] = time.split(":").map(Number);
+  if (period === "PM" && h !== 12) h += 12;
+  if (period === "AM" && h === 12) h = 0;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00`;
+};
 
 const BookConsultation = () => {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [pillar, setPillar] = useState(searchParams.get("pillar") || "");
-  const [level, setLevel] = useState(searchParams.get("level") || "");
   const [date, setDate] = useState<Date>();
   const [time, setTime] = useState("");
   const [booked, setBooked] = useState(false);
+  const [bookingCode, setBookingCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", notes: "" });
   const { toast } = useToast();
 
-  const handleBook = (e: React.FormEvent) => {
+  const mapPillar = (p: string): "business" | "career" | "travel" => {
+    if (p === "student") return "travel";
+    return p as any;
+  };
+
+  const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
-    setBooked(true);
+    if (!date || !time) return;
+    setLoading(true);
+
+    const startTime = parseTime(time);
+    const [h, m] = startTime.split(":").map(Number);
+    const endH = m + 30 >= 60 ? h + 1 : h;
+    const endM = (m + 30) % 60;
+    const endTime = `${String(endH).padStart(2, "0")}:${String(endM).padStart(2, "0")}:00`;
+
+    const { data, error } = await supabase.from("bookings").insert({
+      full_name: form.full_name,
+      email: form.email,
+      phone: form.phone || null,
+      consultation_type: mapPillar(pillar),
+      booking_date: format(date, "yyyy-MM-dd"),
+      start_time: startTime,
+      end_time: endTime,
+      notes: form.notes || null,
+      booking_code: "",
+    }).select("booking_code").single();
+
+    setLoading(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      setBookingCode(data?.booking_code || "");
+      setBooked(true);
+    }
   };
 
   if (booked) {
@@ -33,7 +76,7 @@ const BookConsultation = () => {
         <div className="container-narrow text-center">
           <CheckCircle2 className="w-16 h-16 text-gold mx-auto mb-6" />
           <h1 className="font-serif text-3xl font-bold text-primary mb-4">Consultation Booked!</h1>
-          <p className="text-muted-foreground mb-2">Your booking code: <span className="font-mono font-bold text-primary">BK-ALC-{Math.random().toString(36).substring(2, 7).toUpperCase()}</span></p>
+          <p className="text-muted-foreground mb-2">Your booking code: <span className="font-mono font-bold text-primary">{bookingCode}</span></p>
           <p className="text-muted-foreground mb-8">You will receive a confirmation email with all the details shortly.</p>
           <Link to="/"><Button className="bg-gold text-navy hover:bg-gold/90 font-semibold">Back to Home</Button></Link>
         </div>
@@ -52,17 +95,12 @@ const BookConsultation = () => {
           </div>
         </div>
       </section>
-
       <section className="section-padding">
         <div className="container-narrow">
-          {/* Step indicators */}
           <div className="flex items-center justify-center gap-2 mb-12">
             {[1, 2, 3].map((s) => (
               <div key={s} className="flex items-center gap-2">
-                <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold",
-                  step >= s ? "bg-gold text-navy" : "bg-muted text-muted-foreground"
-                )}>{s}</div>
+                <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold", step >= s ? "bg-gold text-navy" : "bg-muted text-muted-foreground")}>{s}</div>
                 {s < 3 && <div className={cn("w-12 h-0.5", step > s ? "bg-gold" : "bg-border")} />}
               </div>
             ))}
@@ -77,23 +115,9 @@ const BookConsultation = () => {
                   <SelectItem value="business">Business Consulting</SelectItem>
                   <SelectItem value="career">Career Guidance & Mentorship</SelectItem>
                   <SelectItem value="travel">Travel Advisory</SelectItem>
-                  <SelectItem value="student">Student Programs</SelectItem>
                 </SelectContent>
               </Select>
-              {(pillar === "student" || pillar === "travel") && (
-                <Select value={level} onValueChange={setLevel}>
-                  <SelectTrigger className="bg-card"><SelectValue placeholder="Select academic level" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="HS">High School</SelectItem>
-                    <SelectItem value="UG">Undergraduate</SelectItem>
-                    <SelectItem value="Grad">Graduate</SelectItem>
-                    <SelectItem value="PhD">PhD</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-              <Button onClick={() => pillar && setStep(2)} disabled={!pillar} className="w-full bg-gold text-navy hover:bg-gold/90 font-semibold py-5">
-                Continue
-              </Button>
+              <Button onClick={() => pillar && setStep(2)} disabled={!pillar} className="w-full bg-gold text-navy hover:bg-gold/90 font-semibold py-5">Continue</Button>
             </div>
           )}
 
@@ -102,33 +126,14 @@ const BookConsultation = () => {
               <h2 className="font-serif text-2xl font-bold text-primary text-center mb-6">Choose Date & Time</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="flex justify-center">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    disabled={(d) => d < new Date() || d.getDay() === 0 || d.getDay() === 6}
-                    className="rounded-xl border border-border pointer-events-auto p-3"
-                  />
+                  <Calendar mode="single" selected={date} onSelect={setDate} disabled={(d) => d < new Date() || d.getDay() === 0 || d.getDay() === 6} className="rounded-xl border border-border pointer-events-auto p-3" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm text-primary mb-4">
-                    {date ? `Available slots for ${format(date, "MMMM d, yyyy")}` : "Select a date to see available times"}
-                  </h3>
+                  <h3 className="font-semibold text-sm text-primary mb-4">{date ? `Available slots for ${format(date, "MMMM d, yyyy")}` : "Select a date to see available times"}</h3>
                   {date && (
                     <div className="grid grid-cols-2 gap-2">
                       {timeSlots.map((slot) => (
-                        <button
-                          key={slot}
-                          onClick={() => setTime(slot)}
-                          className={cn(
-                            "px-4 py-2.5 text-sm rounded-lg border transition-colors",
-                            time === slot
-                              ? "bg-gold text-navy border-gold font-semibold"
-                              : "border-border hover:border-accent text-foreground"
-                          )}
-                        >
-                          {slot}
-                        </button>
+                        <button key={slot} onClick={() => setTime(slot)} className={cn("px-4 py-2.5 text-sm rounded-lg border transition-colors", time === slot ? "bg-gold text-navy border-gold font-semibold" : "border-border hover:border-accent text-foreground")}>{slot}</button>
                       ))}
                     </div>
                   )}
@@ -144,10 +149,10 @@ const BookConsultation = () => {
           {step === 3 && (
             <form onSubmit={handleBook} className="space-y-5 max-w-md mx-auto">
               <h2 className="font-serif text-2xl font-bold text-primary text-center mb-6">Your Details</h2>
-              <Input placeholder="Full Name" required className="bg-card" />
-              <Input type="email" placeholder="Email Address" required className="bg-card" />
-              <Input placeholder="Phone (optional)" className="bg-card" />
-              <Textarea placeholder="Anything you'd like us to know?" rows={3} className="bg-card" />
+              <Input placeholder="Full Name" required className="bg-card" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
+              <Input type="email" placeholder="Email Address" required className="bg-card" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              <Input placeholder="Phone (optional)" className="bg-card" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <Textarea placeholder="Anything you'd like us to know?" rows={3} className="bg-card" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
               <div className="bg-off-white rounded-lg p-4 text-sm space-y-1">
                 <p><span className="font-semibold">Service:</span> {pillar}</p>
                 <p><span className="font-semibold">Date:</span> {date && format(date, "MMMM d, yyyy")}</p>
@@ -155,7 +160,7 @@ const BookConsultation = () => {
               </div>
               <div className="flex justify-between pt-2">
                 <Button variant="outline" type="button" onClick={() => setStep(2)}>Back</Button>
-                <Button type="submit" className="bg-gold text-navy hover:bg-gold/90 font-semibold">Confirm Booking</Button>
+                <Button type="submit" disabled={loading} className="bg-gold text-navy hover:bg-gold/90 font-semibold">{loading ? "Booking..." : "Confirm Booking"}</Button>
               </div>
             </form>
           )}

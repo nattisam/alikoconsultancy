@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const contactInfo = [
   { icon: Mail, title: "Email", detail: "hello@alikoconsultancy.com" },
@@ -15,14 +16,19 @@ const contactInfo = [
 const Contact = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ full_name: "", email: "", subject: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    const { error } = await supabase.from("contact_submissions").insert(form);
+    setLoading(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
       toast({ title: "Message Sent", description: "We'll get back to you within 24 hours." });
-    }, 1000);
+      setForm({ full_name: "", email: "", subject: "", message: "" });
+    }
   };
 
   return (
@@ -36,8 +42,6 @@ const Contact = () => {
           </div>
         </div>
       </section>
-
-      {/* Contact Info Cards */}
       <section className="bg-gradient-warm">
         <div className="container-wide py-8 md:py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -56,19 +60,17 @@ const Contact = () => {
           </div>
         </div>
       </section>
-
-      {/* Form */}
       <section className="section-padding">
         <div className="container-narrow">
           <div className="bg-card border border-border rounded-xl p-8 md:p-12 max-w-2xl mx-auto">
             <h2 className="font-serif text-2xl font-bold text-primary mb-6 text-center">Send Us a Message</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input placeholder="Full Name" required className="bg-background" />
-                <Input type="email" placeholder="Email Address" required className="bg-background" />
+                <Input placeholder="Full Name" required className="bg-background" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
+                <Input type="email" placeholder="Email Address" required className="bg-background" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </div>
-              <Input placeholder="Subject" required className="bg-background" />
-              <Textarea placeholder="Your message..." rows={5} required className="bg-background" />
+              <Input placeholder="Subject" required className="bg-background" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} />
+              <Textarea placeholder="Your message..." rows={5} required className="bg-background" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
               <Button type="submit" disabled={loading} className="w-full bg-gold text-navy hover:bg-gold/90 font-semibold px-8 py-5">
                 {loading ? "Sending..." : "Send Message"}
               </Button>
