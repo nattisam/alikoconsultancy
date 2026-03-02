@@ -360,6 +360,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string | null
+          file_url: string | null
           id: string
           is_published: boolean
           resource_type: Database["public"]["Enums"]["resource_type"]
@@ -376,6 +377,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          file_url?: string | null
           id?: string
           is_published?: boolean
           resource_type?: Database["public"]["Enums"]["resource_type"]
@@ -392,6 +394,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          file_url?: string | null
           id?: string
           is_published?: boolean
           resource_type?: Database["public"]["Enums"]["resource_type"]

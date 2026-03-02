@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,25 +7,76 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, FileText, X } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import type { Tables } from "@/integrations/supabase/types";
 
-type Resource = Tables<"resources">;
+type Resource = Tables<"resources"> & { file_url?: string | null };
 
-const emptyResource = { title: "", slug: "", description: "", resource_type: "article" as const, consultation_type: "" as any, is_published: false, thumbnail_url: "" };
+const emptyResource = { title: "", slug: "", description: "", resource_type: "article" as const, consultation_type: "" as any, is_published: false, thumbnail_url: "", file_url: "" };
+
+const ACCEPTED_TYPES = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.webp,.svg,.txt,.csv,.zip,.rar";
 
 const AdminResources = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [editing, setEditing] = useState<Partial<Resource> | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const fetchResources = async () => {
     const { data } = await supabase.from("resources").select("*").order("created_at", { ascending: false });
-    setResources(data || []);
+    setResources((data as Resource[]) || []);
   };
 
   useEffect(() => { fetchResources(); }, []);
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    const ext = file.name.split(".").pop();
+    const filePath = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    setUploading(true);
+    setUploadProgress(30);
+
+    const { error } = await supabase.storage.from("resource-files").upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+    setUploadProgress(80);
+
+    if (error) {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+      setUploading(false);
+      setUploadProgress(0);
+      return null;
+    }
+
+    const { data: urlData } = supabase.storage.from("resource-files").getPublicUrl(filePath);
+    setUploadProgress(100);
+    setTimeout(() => { setUploading(false); setUploadProgress(0); }, 500);
+    return urlData.publicUrl;
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editing) return;
+
+    if (file.size > 50 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Maximum file size is 50MB.", variant: "destructive" });
+      return;
+    }
+
+    const url = await uploadFile(file);
+    if (url) {
+      setEditing({ ...editing, file_url: url });
+      toast({ title: "File uploaded successfully" });
+    }
+    // Reset input
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const save = async () => {
     if (!editing) return;
@@ -37,6 +88,7 @@ const AdminResources = () => {
       consultation_type: editing.consultation_type || null,
       is_published: editing.is_published || false,
       thumbnail_url: editing.thumbnail_url || null,
+      file_url: editing.file_url || null,
     };
 
     const { error } = isNew
@@ -56,6 +108,17 @@ const AdminResources = () => {
     await supabase.from("resources").delete().eq("id", id);
     toast({ title: "Resource Deleted" });
     fetchResources();
+  };
+
+  const getFileName = (url: string) => {
+    try {
+      const parts = url.split("/");
+      const name = parts[parts.length - 1];
+      // Remove the timestamp prefix
+      return name.replace(/^\d+-[a-z0-9]+\./, "file.");
+    } catch {
+      return "Attached file";
+    }
   };
 
   return (
@@ -80,7 +143,12 @@ const AdminResources = () => {
               <span className="text-xs text-muted-foreground capitalize">{r.resource_type}</span>
             </div>
             <h3 className="font-semibold text-primary mb-1">{r.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{r.description}</p>
+            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{r.description}</p>
+            {r.file_url && (
+              <a href={r.file_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-accent hover:underline mb-3">
+                <FileText className="w-3 h-3" /> File attached
+              </a>
+            )}
             <div className="flex gap-2">
               <Button size="sm" variant="outline" onClick={() => { setEditing(r); setIsNew(false); }}><Pencil className="w-3 h-3 mr-1" /> Edit</Button>
               <Button size="sm" variant="ghost" onClick={() => remove(r.id)} className="text-destructive"><Trash2 className="w-3 h-3" /></Button>
@@ -115,11 +183,45 @@ const AdminResources = () => {
                   <SelectItem value="travel">Travel</SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* File Upload */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Attach File (PDF, Word, Image, etc.)</label>
+                {editing.file_url ? (
+                  <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                    <FileText className="w-4 h-4 text-accent shrink-0" />
+                    <a href={editing.file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline truncate flex-1">
+                      {getFileName(editing.file_url)}
+                    </a>
+                    <Button type="button" size="sm" variant="ghost" onClick={() => setEditing({ ...editing, file_url: "" })} className="text-destructive shrink-0">
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div
+                    className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:border-accent/50 transition-colors"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-sm text-muted-foreground">Click to upload a file</p>
+                    <p className="text-xs text-muted-foreground mt-1">PDF, Word, Excel, Images, ZIP — up to 50MB</p>
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept={ACCEPTED_TYPES}
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                {uploading && <Progress value={uploadProgress} className="h-2" />}
+              </div>
+
               <div className="flex items-center gap-3">
                 <Switch checked={editing.is_published || false} onCheckedChange={(v) => setEditing({ ...editing, is_published: v })} />
                 <span className="text-sm">Published</span>
               </div>
-              <Button onClick={save} className="w-full bg-gold text-navy hover:bg-gold/90 font-semibold">Save</Button>
+              <Button onClick={save} disabled={uploading} className="w-full bg-gold text-navy hover:bg-gold/90 font-semibold">Save</Button>
             </div>
           )}
         </DialogContent>
