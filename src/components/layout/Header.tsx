@@ -29,25 +29,25 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-50 bg-navy backdrop-blur-md border-b border-border">
       <div className="container-wide flex items-center justify-between h-16 px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-serif text-xl font-bold text-primary tracking-tight">
+          <span className="font-serif text-xl font-bold text-primary-foreground tracking-tight">
             Aliko <span className="text-gradient-gold">Consultancy</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-2">
           {navItems.map((item) =>
             item.children ? (
               <div key={item.label} className="relative group">
                 <Link
                   to={item.href}
-                  className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors hover:text-accent ${
+                  className={`flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-md transition-colors hover:text-accent ${
                     location.pathname.startsWith(item.href)
                       ? "text-accent"
-                      : "text-muted-foreground"
+                      : "text-primary-foreground/70"
                   }`}
                 >
                   {item.label}
@@ -71,10 +71,10 @@ const Header = () => {
               <Link
                 key={item.label}
                 to={item.href}
-                className={`px-3 py-2 text-sm font-medium rounded-md transition-colors hover:text-accent ${
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors hover:text-accent ${
                   location.pathname === item.href
                     ? "text-accent"
-                    : "text-muted-foreground"
+                    : "text-primary-foreground/70"
                 }`}
               >
                 {item.label}
@@ -94,7 +94,7 @@ const Header = () => {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? <X className="w-5 h-5 text-primary-foreground" /> : <Menu className="w-5 h-5 text-primary-foreground" />}
           </button>
         </div>
       </div>

@@ -4,6 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FileText, BookOpen, CheckSquare, Download } from "lucide-react";
 import resourcesThumb from "@/assets/resources-thumb.jpg";
+import resBizPlan from "@/assets/res-biz-plan.jpg";
+import resCareerGuide from "@/assets/res-career-guide.jpg";
+import resTravelChecklist from "@/assets/res-travel-checklist.jpg";
+import resInterview from "@/assets/res-interview.jpg";
+import resMarketResearch from "@/assets/res-market-research.jpg";
+import resStudyGuide from "@/assets/res-study-guide.jpg";
+
+const fallbackThumbs = [resBizPlan, resCareerGuide, resTravelChecklist, resInterview, resMarketResearch, resStudyGuide];
 
 const typeIcons: Record<string, typeof FileText> = {
   template: FileText,
@@ -69,13 +77,13 @@ const Resources = () => {
             <p className="text-center text-muted-foreground py-12">No resources available yet. Check back soon!</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              {resources.map((r) => {
+              {resources.map((r, index) => {
                 const Icon = typeIcons[r.resource_type] || FileText;
                 return (
                   <div key={r.id} className="group bg-card rounded-xl overflow-hidden border border-border card-hover">
                     <div className="aspect-[16/10] overflow-hidden bg-muted">
                       <img
-                        src={r.thumbnail_url || resourcesThumb}
+                        src={r.thumbnail_url || fallbackThumbs[index % fallbackThumbs.length]}
                         alt={r.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
