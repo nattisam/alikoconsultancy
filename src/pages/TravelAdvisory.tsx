@@ -29,10 +29,12 @@ const communicationPlatforms = [
 ];
 
 const visaGuidance = [
-  { country: "United States", items: ["F-1 Student Visa for academic programs", "J-1 Exchange Visitor Visa", "DS-160 form completion guidance", "Embassy interview preparation tips"] },
+  { country: "United States", items: ["F-1 Student Visa for academic programs", "J-1 Exchange Visitor Visa", "B1/B2 Travel & Business Visa for short-term visits, conferences, and business activities", "DS-160 form completion guidance", "Embassy interview preparation tips"] },
   { country: "United Kingdom", items: ["Student Visa (formerly Tier 4)", "CAS letter requirements", "Financial documentation guidance", "Immigration Health Surcharge (IHS)"] },
   { country: "Canada", items: ["Study Permit application process", "SDS (Student Direct Stream) for faster processing", "Provincial requirements", "Post-graduation work permit options"] },
   { country: "Europe (Schengen)", items: ["National D-Visa for long-stay studies", "Country-specific requirements (Germany, France, etc.)", "Blocked account setup guidance", "Residence permit procedures"] },
+  { country: "United Arab Emirates", items: ["Student Visa for universities in Dubai, Abu Dhabi, and Sharjah", "Visit/Tourist Visa for short-term travel", "Employment & Business Visa requirements", "Medical fitness and Emirates ID process"] },
+  { country: "Australia", items: ["Student Visa (Subclass 500) for study programs", "Genuine Temporary Entrant (GTE) requirement", "OSHC health insurance requirements", "Post-study work visa (Subclass 485) options"] },
 ];
 
 const TravelAdvisory = () => (
@@ -146,9 +148,9 @@ const TravelAdvisory = () => (
             We provide step-by-step guidance through the visa application process for multiple destinations, including tips and country-specific requirements.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {visaGuidance.map((v, i) => {
-            const styles = ["card-navy", "card-forest", "card-teal", "card-navy"];
+            const styles = ["card-navy", "card-forest", "card-teal", "card-navy", "card-forest", "card-teal"];
             return (
               <div key={v.country} className={`${styles[i]} rounded-xl p-8`}>
                 <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-4">{v.country}</h3>
