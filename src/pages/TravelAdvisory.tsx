@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Briefcase, Users, Globe, ArrowRight } from "lucide-react";
+import { GraduationCap, Briefcase, Users, Globe, ArrowRight, Video, MessageSquare, Mail, CalendarDays, Shield } from "lucide-react";
 import pillarTravel from "@/assets/pillar-travel.jpg";
 import bgHighschool from "@/assets/bg-highschool.jpg";
 import bgUndergraduate from "@/assets/bg-undergraduate.jpg";
@@ -19,6 +19,20 @@ const levels = [
   { title: "Undergraduate", href: "/travel-advisory/undergraduate", desc: "University admissions and scholarship guidance.", image: bgUndergraduate },
   { title: "Graduate", href: "/travel-advisory/graduate", desc: "Master's programs, research opportunities, and funding.", image: bgGraduate },
   { title: "PhD", href: "/travel-advisory/phd", desc: "Doctoral advisory and research guidance.", image: bgPhd },
+];
+
+const communicationPlatforms = [
+  { icon: Video, title: "Zoom", desc: "All guidance sessions and meetings are conducted via Zoom for interactive, face-to-face consultation." },
+  { icon: MessageSquare, title: "Notion", desc: "Access program resources, materials, and structured templates through our organized Notion workspace." },
+  { icon: CalendarDays, title: "Google Calendar", desc: "Sessions are scheduled via Google Calendar so you never miss an important meeting or deadline." },
+  { icon: Mail, title: "Email & Google Drive", desc: "Regular communication, resource sharing, and document collaboration through email and Drive." },
+];
+
+const visaGuidance = [
+  { country: "United States", items: ["F-1 Student Visa for academic programs", "J-1 Exchange Visitor Visa", "DS-160 form completion guidance", "Embassy interview preparation tips"] },
+  { country: "United Kingdom", items: ["Student Visa (formerly Tier 4)", "CAS letter requirements", "Financial documentation guidance", "Immigration Health Surcharge (IHS)"] },
+  { country: "Canada", items: ["Study Permit application process", "SDS (Student Direct Stream) for faster processing", "Provincial requirements", "Post-graduation work permit options"] },
+  { country: "Europe (Schengen)", items: ["National D-Visa for long-stay studies", "Country-specific requirements (Germany, France, etc.)", "Blocked account setup guidance", "Residence permit procedures"] },
 ];
 
 const TravelAdvisory = () => (
@@ -42,6 +56,30 @@ const TravelAdvisory = () => (
               Start Your Travel Process
             </Button>
           </Link>
+        </div>
+      </div>
+    </section>
+
+    {/* Communication Platforms */}
+    <section className="section-padding bg-warm-beige">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">How We Work With You</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">Our organized system ensures seamless communication and easy access to all resources throughout your journey.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {communicationPlatforms.map((p, i) => {
+            const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+            return (
+              <div key={p.title} className={`${cardStyles[i]} rounded-xl p-6 text-center card-hover`}>
+                <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-4">
+                  <p.icon className="w-6 h-6 text-accent" />
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-primary mb-2">{p.title}</h3>
+                <p className="text-muted-foreground text-sm">{p.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -92,6 +130,39 @@ const TravelAdvisory = () => (
               </div>
             </Link>
           ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Visa Guidance Section */}
+    <section className="section-padding bg-gradient-cool">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+            <Shield className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+            Visa Guidance by Country
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            We provide step-by-step guidance through the visa application process for multiple destinations, including tips and country-specific requirements.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {visaGuidance.map((v, i) => {
+            const styles = ["card-navy", "card-forest", "card-teal", "card-navy"];
+            return (
+              <div key={v.country} className={`${styles[i]} rounded-xl p-8`}>
+                <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-4">{v.country}</h3>
+                <ul className="space-y-2">
+                  {v.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-primary-foreground/80">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-1.5" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

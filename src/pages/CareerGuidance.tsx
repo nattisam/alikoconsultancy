@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { UserCheck, BookOpen, Award, Compass, ArrowRight } from "lucide-react";
+import { UserCheck, BookOpen, Award, Compass, ArrowRight, PenTool, FileText, Mail, CheckCircle2, Info } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import pillarCareer from "@/assets/pillar-career.jpg";
 
 const programs = [
@@ -15,6 +16,20 @@ const successMetrics = [
   { value: "85%", label: "Career Advancement" },
   { value: "50+", label: "Industry Mentors" },
   { value: "4.9/5", label: "Client Rating" },
+];
+
+const writingGuide = [
+  { name: "Professional CV / Resume", desc: "A well-structured document highlighting your education, skills, work experience, and achievements. Essential for every application.", tips: ["Tailor it to each position or program", "Use action verbs and quantify achievements", "Keep it to 1–2 pages maximum", "Include relevant extracurricular activities"] },
+  { name: "Personal Statement", desc: "A critical 1-page essay outlining your life journey, character, academic interests, relevant skills, and motivation for a specific course or role.", tips: ["Use a story-driven tone", "Mention soft skills naturally", "Stay within 500–750 words", "Show genuine motivation"] },
+  { name: "Statement of Purpose (SOP)", desc: "A 1–2 page essay defining your academic/professional journey, career goals, and motivation. Ideal for graduate applications and career pivots.", tips: ["Maintain a professional tone", "Connect past experience to future goals", "Stay within 500–1,000 words", "Be specific about why this program/company"] },
+  { name: "Motivational Letter", desc: "A one-page document explaining why you are applying, why you are a perfect fit, and your future goals.", tips: ["Keep it concise and professional", "Highlight unique value you bring", "Show awareness of the organization", "Stay within 500–750 words"] },
+];
+
+const professorOutreach = [
+  { step: "1", title: "Prepare Your Profile", desc: "Ensure your email name is professional and your CV is polished before reaching out." },
+  { step: "2", title: "Research the University & Department", desc: "Understand the professor's research interests and recent publications." },
+  { step: "3", title: "Find the Right Professor", desc: "Identify professors whose research aligns with your interests using university faculty pages." },
+  { step: "4", title: "Craft a Compelling Email", desc: "Write a concise, personalized email expressing genuine interest in their work and how your skills align." },
 ];
 
 const CareerGuidance = () => (
@@ -76,6 +91,67 @@ const CareerGuidance = () => (
       </div>
     </section>
 
+    {/* CV & Essay Writing Guide */}
+    <section className="section-padding bg-off-white">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+            <PenTool className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+            CV & Application Writing Guide
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">Master the art of writing compelling professional documents that get results.</p>
+        </div>
+
+        <Accordion type="single" collapsible>
+          {writingGuide.map((item) => (
+            <AccordionItem key={item.name} value={item.name} className="bg-card border border-border rounded-xl mb-3 px-6">
+              <AccordionTrigger className="font-serif text-base font-semibold text-primary hover:no-underline">
+                {item.name}
+              </AccordionTrigger>
+              <AccordionContent>
+                <p className="text-muted-foreground text-sm mb-4">{item.desc}</p>
+                <ul className="space-y-2">
+                  {item.tips.map((tip) => (
+                    <li key={tip} className="flex items-start gap-2 text-sm text-foreground">
+                      <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </section>
+
+    {/* Professor Outreach Guide */}
+    <section className="section-padding bg-warm-beige">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+            <Mail className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+            How to Reach Out to Professors
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">A step-by-step guide for contacting professors for research and graduate opportunities.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {professorOutreach.map((s, i) => {
+            const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+            return (
+              <div key={s.step} className={`${cardStyles[i]} rounded-xl p-6 text-center card-hover`}>
+                <div className="w-12 h-12 rounded-full bg-navy flex items-center justify-center mx-auto mb-4">
+                  <span className="text-accent font-bold text-lg">{s.step}</span>
+                </div>
+                <h3 className="font-serif text-base font-semibold text-primary mb-2">{s.title}</h3>
+                <p className="text-muted-foreground text-sm">{s.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
     {/* Image + Text Section */}
     <section className="section-padding bg-off-white">
       <div className="container-wide">
@@ -89,7 +165,7 @@ const CareerGuidance = () => (
               Whether you are starting out, seeking advancement, or making a career change, our mentors bring real-world experience and proven strategies to guide you.
             </p>
             <ul className="space-y-3 mb-8">
-              {["Personalized career roadmaps", "Industry-specific mentors", "Interview and resume coaching", "Networking opportunities"].map((item) => (
+              {["Personalized career roadmaps", "Industry-specific mentors", "Interview and resume coaching", "Networking opportunities", "Financial aid & scholarship guidance", "English proficiency exam preparation"].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-foreground">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
                   {item}
