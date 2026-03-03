@@ -91,37 +91,21 @@ const CareerGuidance = () => (
       </div>
     </section>
 
-    {/* CV & Essay Writing Guide */}
+    {/* CV & Essay Writing Guide - Moved to Resources/Knowledge Hub */}
     <section className="section-padding bg-off-white">
       <div className="container-wide">
-        <div className="text-center mb-12">
+        <div className="text-center">
           <h2 className="font-serif text-3xl font-bold text-primary mb-4">
             <PenTool className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
-            CV & Application Writing Guide
+            CV & Application Writing Resources
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">Master the art of writing compelling professional documents that get results.</p>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-8">Access our comprehensive guides, templates, and tips for crafting compelling CVs, resumes, and application documents.</p>
+          <Link to="/resources">
+            <Button className="bg-gold text-navy hover:bg-gold/90 font-semibold px-8 py-5">
+              <ArrowRight className="w-4 h-4 mr-2" /> Visit Knowledge Hub
+            </Button>
+          </Link>
         </div>
-
-        <Accordion type="single" collapsible>
-          {writingGuide.map((item) => (
-            <AccordionItem key={item.name} value={item.name} className="bg-card border border-border rounded-xl mb-3 px-6">
-              <AccordionTrigger className="font-serif text-base font-semibold text-primary hover:no-underline">
-                {item.name}
-              </AccordionTrigger>
-              <AccordionContent>
-                <p className="text-muted-foreground text-sm mb-4">{item.desc}</p>
-                <ul className="space-y-2">
-                  {item.tips.map((tip) => (
-                    <li key={tip} className="flex items-start gap-2 text-sm text-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
       </div>
     </section>
 
