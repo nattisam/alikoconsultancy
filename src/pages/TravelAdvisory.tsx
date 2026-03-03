@@ -178,7 +178,7 @@ const TravelAdvisory = () => (
         <p className="text-primary-foreground/70 mb-8">Submit an application or send us a quick inquiry.</p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link to="/apply?pillar=travel"><Button className="bg-gold text-navy hover:bg-gold/90 font-semibold px-8 py-6">Apply Now</Button></Link>
-          <Link to="/contact"><Button variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6">Contact Us</Button></Link>
+          <Link to="/contact"><Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold px-8 py-6">Contact Us</Button></Link>
         </div>
       </div>
     </section>
