@@ -37,14 +37,22 @@ const Apply = () => {
     const formData: Record<string, string> = { ...form, level };
     Object.keys(formData).forEach((k) => { if (!formData[k]) delete formData[k]; });
 
-    const { data, error } = await supabase.from("applications").insert({
+    // Generate application code first via RPC to avoid needing SELECT after INSERT
+    const { data: generatedCode, error: codeError } = await supabase.rpc("generate_application_code");
+    if (codeError || !generatedCode) {
+      toast({ title: "Error", description: "Could not generate application code.", variant: "destructive" });
+      setLoading(false);
+      return;
+    }
+
+    const { error } = await supabase.from("applications").insert({
       full_name: form.full_name,
       email: form.email,
       phone: form.phone || null,
       consultation_type: mapPillar(pillar),
       form_data: formData,
-      application_code: "",
-    }).select("application_code").single();
+      application_code: generatedCode,
+    });
 
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -52,21 +60,14 @@ const Apply = () => {
       return;
     }
 
-    if (files.length > 0 && data) {
+    if (files.length > 0) {
       for (const file of files) {
-        const path = `${data.application_code}/${file.name}`;
+        const path = `${generatedCode}/${file.name}`;
         await supabase.storage.from("application-documents").upload(path, file);
-        await supabase.from("application_documents").insert({
-          application_id: undefined as any,
-          file_name: file.name,
-          file_path: path,
-          file_size: file.size,
-          mime_type: file.type,
-        });
       }
     }
 
-    setAppCode(data?.application_code || "");
+    setAppCode(generatedCode);
     setSubmitted(true);
     setLoading(false);
   };
