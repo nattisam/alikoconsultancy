@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { FileText, BookOpen, CheckSquare, Download, PenTool, CheckCircle2, ExternalLink, Globe, GraduationCap, Calendar, Info, Mail } from "lucide-react";
+import { FileText, BookOpen, CheckSquare, Download, PenTool, CheckCircle2, ExternalLink, Globe, GraduationCap, Calendar, Info, Mail, Languages, DollarSign, Award } from "lucide-react";
 import resourcesThumb from "@/assets/resources-thumb.jpg";
 import resBizPlan from "@/assets/res-biz-plan.jpg";
 import resCareerGuide from "@/assets/res-career-guide.jpg";
@@ -69,6 +69,39 @@ const professorOutreach = [
   { step: "2", title: "Research the University & Department", desc: "Understand the professor's research interests and recent publications." },
   { step: "3", title: "Find the Right Professor", desc: "Identify professors whose research aligns with your interests using university faculty pages." },
   { step: "4", title: "Craft a Compelling Email", desc: "Write a concise, personalized email expressing genuine interest in their work and how your skills align." },
+];
+
+const ieltsResources = [
+  { name: "IELTS Official Sample Tests", url: "https://ielts.org/take-a-test/preparation-resources/sample-test-questions/academic-test", desc: "Free official IELTS academic sample test questions." },
+  { name: "British Council Practice Tests", url: "https://takeielts.britishcouncil.org/take-ielts/prepare/free-ielts-english-practice-tests", desc: "Free IELTS practice tests from the British Council." },
+  { name: "IDP IELTS Academic Writing", url: "https://ielts.idp.com/about/academic-writing", desc: "Official guidance on IELTS academic writing tasks." },
+  { name: "TED IELTS Resources", url: "https://ted-ielts.com/free-ielts-resources/", desc: "Free IELTS preparation resources and tips." },
+  { name: "IELTS Resources.org", url: "https://ieltsresources.org/", desc: "Comprehensive free IELTS study materials." },
+  { name: "IELTS Liz", url: "https://ieltsliz.com/", desc: "Popular free IELTS preparation lessons and tips." },
+  { name: "IELTS Up", url: "https://ielts-up.com/", desc: "Free IELTS practice tests and preparation materials." },
+  { name: "ETS Grad School Test Guide", url: "https://www.ets.org/grad-school-journey/test-guide.html", desc: "Guide to graduate school standardized tests (GRE, TOEFL)." },
+];
+
+const duolingoResources = [
+  { name: "Duolingo English Test – Institutions", url: "https://englishtest.duolingo.com/institutions", desc: "See which institutions accept the Duolingo English Test." },
+  { name: "English Proficiency Exams Guide", url: "https://englishtest.duolingo.com/applicants", desc: "Overview of the Duolingo English Test for applicants." },
+  { name: "Comparison of Proficiency Tests", url: "https://englishtest.duolingo.com/scores", desc: "Compare Duolingo scores with IELTS and TOEFL equivalents." },
+  { name: "Duolingo Test Resources", url: "https://englishtest.duolingo.com/preparation", desc: "Official preparation resources for the Duolingo English Test." },
+];
+
+const financialAidLinks = [
+  { name: "NAFSA Financial Aid Guide", url: "https://www.nafsa.org/about/about-international-education/financial-aid-undergraduate-international-students", desc: "Comprehensive guide to financial aid for international undergrad students." },
+  { name: "UC Berkeley International Aid", url: "https://financialaid.berkeley.edu/apply-now/international-students/", desc: "Financial aid information for international students at UC Berkeley." },
+  { name: "EduPass Financial Aid", url: "https://www.edupass.org/paying-for-college/financial-aid/undergraduate/", desc: "Guide to paying for college as an international student." },
+];
+
+const recommendationTips = [
+  "Choose a recommender who knows you well academically or professionally",
+  "Provide your recommender with your CV, goals, and key achievements",
+  "Give at least 3–4 weeks notice before the deadline",
+  "A strong letter highlights specific examples, not generic praise",
+  "Request letters from different perspectives (academic, professional, extracurricular)",
+  "Follow up politely and always send a thank-you note",
 ];
 
 const usefulPlatforms = [
@@ -275,7 +308,98 @@ const Resources = () => {
         </div>
       </section>
 
-      {/* Useful Links & Platforms */}
+      {/* English Proficiency & Exam Resources */}
+      <section className="section-padding bg-gradient-warm">
+        <div className="container-wide">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+              <Languages className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+              English Proficiency & Exam Resources
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Free tests, study materials, and official guides for IELTS, Duolingo, TOEFL, and GRE.</p>
+          </div>
+
+          <div className="mb-10">
+            <h3 className="font-serif text-xl font-semibold text-primary mb-6">IELTS & Standardized Tests</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {ieltsResources.map((r) => (
+                <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer" className="bg-card border border-border rounded-xl p-5 card-hover group">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-serif text-sm font-semibold text-primary">{r.name}</h4>
+                    <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-accent transition-colors flex-shrink-0" />
+                  </div>
+                  <p className="text-muted-foreground text-xs leading-relaxed">{r.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-serif text-xl font-semibold text-primary mb-6">Duolingo English Test</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {duolingoResources.map((r) => (
+                <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer" className="bg-card border border-border rounded-xl p-5 card-hover group">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-serif text-sm font-semibold text-primary">{r.name}</h4>
+                    <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-accent transition-colors flex-shrink-0" />
+                  </div>
+                  <p className="text-muted-foreground text-xs leading-relaxed">{r.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Financial Aid */}
+      <section className="section-padding bg-off-white">
+        <div className="container-wide">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+              <DollarSign className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+              Financial Aid Resources
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Guides and tools to help international students find and apply for financial aid.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {financialAidLinks.map((r) => (
+              <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer" className="card-navy rounded-xl p-6 card-hover group">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-serif text-base font-semibold text-primary-foreground">{r.name}</h4>
+                  <ExternalLink className="w-4 h-4 text-accent flex-shrink-0" />
+                </div>
+                <p className="text-primary-foreground/70 text-sm leading-relaxed">{r.desc}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recommendation Letter Guide */}
+      <section className="section-padding bg-gradient-cool">
+        <div className="container-wide">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+              <Award className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+              Writing a Strong Recommendation Letter
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Tips for requesting and securing impactful recommendation letters for your applications.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {recommendationTips.map((tip, i) => {
+              const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle", "card-navy-subtle", "card-gold-subtle"];
+              return (
+                <div key={i} className={`${cardStyles[i]} rounded-xl p-5 flex items-start gap-3`}>
+                  <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-foreground">{tip}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+
       <section className="section-padding bg-warm-beige">
         <div className="container-wide">
           <div className="text-center mb-12">
