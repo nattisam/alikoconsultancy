@@ -113,12 +113,15 @@ const BusinessConsulting = () => (
             <h2 className="font-serif text-3xl font-bold text-primary mb-4">Outcomes You Can Expect</h2>
             <p className="text-muted-foreground mb-8">We focus on measurable results that drive real business impact.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {outcomes.map((o) => (
-                <div key={o} className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
-                  <span className="text-sm text-primary font-medium">{o}</span>
-                </div>
-              ))}
+              {outcomes.map((o, i) => {
+                const styles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle", "card-navy-subtle", "card-gold-subtle"];
+                return (
+                  <div key={o} className={`flex items-center gap-3 ${styles[i]} rounded-lg px-4 py-3`}>
+                    <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
+                    <span className="text-sm text-primary font-medium">{o}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg">
