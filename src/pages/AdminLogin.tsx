@@ -10,31 +10,19 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    if (isSignUp) {
-      const { error } = await signUp(email, password, email.split("@")[0]);
-      setLoading(false);
-      if (error) {
-        toast({ title: "Sign Up Failed", description: error.message, variant: "destructive" });
-      } else {
-        toast({ title: "Account Created", description: "You can now sign in." });
-        setIsSignUp(false);
-      }
+    const { error } = await signIn(email, password);
+    setLoading(false);
+    if (error) {
+      toast({ title: "Login Failed", description: error.message, variant: "destructive" });
     } else {
-      const { error } = await signIn(email, password);
-      setLoading(false);
-      if (error) {
-        toast({ title: "Login Failed", description: error.message, variant: "destructive" });
-      } else {
-        navigate("/admin");
-      }
+      navigate("/admin");
     }
   };
 
@@ -67,11 +55,8 @@ const AdminLogin = () => {
               className="bg-background"
             />
             <Button type="submit" disabled={loading} className="w-full bg-gold text-navy hover:bg-gold/90 font-semibold py-5">
-              {loading ? (isSignUp ? "Creating..." : "Signing in...") : (isSignUp ? "Create Account" : "Sign In")}
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
-            <button type="button" onClick={() => setIsSignUp(!isSignUp)} className="w-full text-xs text-muted-foreground hover:text-accent transition-colors">
-              {isSignUp ? "Already have an account? Sign In" : "Need an account? Sign Up"}
-            </button>
           </form>
         </div>
       </div>
