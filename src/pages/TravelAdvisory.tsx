@@ -1,17 +1,26 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Briefcase, Users, Globe, ArrowRight, Video, MessageSquare, Mail, CalendarDays, Shield } from "lucide-react";
+import { GraduationCap, Briefcase, Users, Globe, ArrowRight, Video, MessageSquare, Mail, CalendarDays, Shield, School, FileCheck, Eye, Plane, Stethoscope, PenTool } from "lucide-react";
 import pillarTravel from "@/assets/pillar-travel.jpg";
 import bgHighschool from "@/assets/bg-highschool.jpg";
 import bgUndergraduate from "@/assets/bg-undergraduate.jpg";
 import bgGraduate from "@/assets/bg-graduate.jpg";
 import bgPhd from "@/assets/bg-phd.jpg";
 
+const services = [
+  { icon: School, title: "University Selection", desc: "Expert guidance to help you identify and shortlist universities that match your academic profile and career goals." },
+  { icon: GraduationCap, title: "University Admission", desc: "End-to-end support through the admission process, including application preparation and submission." },
+  { icon: FileCheck, title: "Student Visa Assistance", desc: "Step-by-step guidance through the student visa application process for multiple destinations." },
+  { icon: Eye, title: "Visit Visa Services", desc: "Support for tourist, family visit, medical, and seminar visas across different countries." },
+  { icon: PenTool, title: "Visa Application Form Filling", desc: "Professional assistance with completing visa application forms accurately and thoroughly." },
+  { icon: Briefcase, title: "Work Visa Guidance", desc: "Advisory services for work permits, corporate relocation, and business visa applications." },
+];
+
 const categories = [
   { icon: GraduationCap, title: "Student Travel", desc: "Study abroad guidance for all academic levels. Visa, applications, and enrollment support.", href: "/travel-advisory/undergraduate", cardClass: "card-navy" },
   { icon: Users, title: "Visitor Travel", desc: "Tourist and family visit visa consulting, travel planning, and itinerary support.", href: "/contact", cardClass: "card-forest" },
   { icon: Briefcase, title: "Business Travel", desc: "Corporate relocation, work permits, and business visa advisory services.", href: "/contact", cardClass: "card-teal" },
-  { icon: Globe, title: "Other Travel Consulting", desc: "Immigration consultations, cultural transition support, and custom advisory.", href: "/contact", cardClass: "card-navy" },
+  { icon: Globe, title: "Other Travel Consulting", desc: "Immigration consultations, medical travel, seminars, and custom advisory.", href: "/contact", cardClass: "card-navy" },
 ];
 
 const levels = [
@@ -45,13 +54,12 @@ const TravelAdvisory = () => (
       <div className="absolute inset-0 bg-navy/85" />
       <div className="relative container-wide px-4 lg:px-8 py-20 md:py-28 lg:py-36">
         <div className="max-w-3xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-accent mb-4 block">Travel Advisory</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-accent mb-4 block">Study Abroad & Travel Advisory</span>
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
             Your Global Journey, Simplified
           </h1>
           <p className="text-primary-foreground/70 text-lg mb-8 leading-relaxed">
-            Comprehensive travel consulting for students, families, and professionals.
-            From visa applications to relocation support, we guide every step.
+            Guiding students through every step of their international education journey and supporting travelers moving abroad for work, visits, medical needs, or seminars.
           </p>
           <Link to="/apply?pillar=travel">
             <Button className="bg-gold text-navy hover:bg-gold/90 font-semibold px-8 py-6">
@@ -62,23 +70,23 @@ const TravelAdvisory = () => (
       </div>
     </section>
 
-    {/* Communication Platforms */}
-    <section className="section-padding bg-warm-beige">
+    {/* Our Services */}
+    <section className="section-padding bg-off-white">
       <div className="container-wide">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl font-bold text-primary mb-4">How We Work With You</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">Our organized system ensures seamless communication and easy access to all resources throughout your journey.</p>
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">Our Services</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">Comprehensive support for every stage of your international journey.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {communicationPlatforms.map((p, i) => {
-            const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((s, i) => {
+            const cardStyles = ["card-navy", "card-forest", "card-teal", "card-navy", "card-forest", "card-teal"];
             return (
-              <div key={p.title} className={`${cardStyles[i]} rounded-xl p-6 text-center card-hover`}>
-                <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-4">
-                  <p.icon className="w-6 h-6 text-accent" />
+              <div key={s.title} className={`${cardStyles[i]} rounded-xl p-7 card-hover`}>
+                <div className="w-12 h-12 rounded-lg bg-primary-foreground/15 flex items-center justify-center mb-5">
+                  <s.icon className="w-6 h-6 text-accent" />
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-primary mb-2">{p.title}</h3>
-                <p className="text-muted-foreground text-sm">{p.desc}</p>
+                <h3 className="font-serif text-lg font-semibold text-primary-foreground mb-2">{s.title}</h3>
+                <p className="text-primary-foreground/70 text-sm leading-relaxed">{s.desc}</p>
               </div>
             );
           })}
@@ -162,6 +170,30 @@ const TravelAdvisory = () => (
                     </li>
                   ))}
                 </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    {/* How We Work With You - moved to bottom */}
+    <section className="section-padding bg-warm-beige">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">How We Work With You</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">Our organized system ensures seamless communication and easy access to all resources throughout your journey.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {communicationPlatforms.map((p, i) => {
+            const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+            return (
+              <div key={p.title} className={`${cardStyles[i]} rounded-xl p-6 text-center card-hover`}>
+                <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-4">
+                  <p.icon className="w-6 h-6 text-accent" />
+                </div>
+                <h3 className="font-serif text-lg font-semibold text-primary mb-2">{p.title}</h3>
+                <p className="text-muted-foreground text-sm">{p.desc}</p>
               </div>
             );
           })}

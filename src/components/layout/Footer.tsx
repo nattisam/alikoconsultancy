@@ -11,7 +11,7 @@ const Footer = () => {
               Aliko <span className="text-gold">Consultancy</span>
             </h3>
             <p className="text-sm text-primary-foreground/70 leading-relaxed">
-              Premium consultancy services in Business, Career, and Travel Advisory.
+              Premium consultancy services in Business, Study Abroad & Travel Advisory, and Career Guidance & Mentorship.
               Guiding your next chapter with expertise and care.
             </p>
           </div>
@@ -23,8 +23,8 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/business-consulting" className="text-primary-foreground/70 hover:text-gold transition-colors">Business Consulting</Link></li>
-              <li><Link to="/career-guidance" className="text-primary-foreground/70 hover:text-gold transition-colors">Career Guidance</Link></li>
-              <li><Link to="/travel-advisory" className="text-primary-foreground/70 hover:text-gold transition-colors">Travel Advisory</Link></li>
+              <li><Link to="/career-guidance" className="text-primary-foreground/70 hover:text-gold transition-colors">Career Guidance & Mentorship</Link></li>
+              <li><Link to="/travel-advisory" className="text-primary-foreground/70 hover:text-gold transition-colors">Study Abroad & Travel Advisory</Link></li>
               <li><Link to="/resources" className="text-primary-foreground/70 hover:text-gold transition-colors">Resources</Link></li>
               <li><Link to="/webinars" className="text-primary-foreground/70 hover:text-gold transition-colors">Webinars</Link></li>
             </ul>

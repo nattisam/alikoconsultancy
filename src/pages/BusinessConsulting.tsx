@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, BarChart3, Target, Users, ArrowRight, CheckCircle2 } from "lucide-react";
+import { TrendingUp, BarChart3, Target, Users, ArrowRight, CheckCircle2, Building2 } from "lucide-react";
 import pillarBusiness from "@/assets/pillar-business.jpg";
 
 const services = [
@@ -17,6 +17,15 @@ const outcomes = [
   "Leadership development",
   "Process optimization",
   "Investor readiness",
+];
+
+const clientCompanies = [
+  { name: "TechVentures Inc.", industry: "Technology", desc: "Helped scale from seed to Series A with market entry strategy." },
+  { name: "GreenLeaf Exports", industry: "Agriculture", desc: "Optimized supply chain operations, reducing costs by 30%." },
+  { name: "Meridian Healthcare", industry: "Healthcare", desc: "Guided expansion into three new regional markets." },
+  { name: "NovaRetail Group", industry: "Retail", desc: "Developed omnichannel strategy driving 45% revenue growth." },
+  { name: "Atlas Construction", industry: "Real Estate", desc: "Restructured operations and secured investor funding." },
+  { name: "BrightPath Education", industry: "Education", desc: "Strategic advisory for EdTech product launch and scaling." },
 ];
 
 const BusinessConsulting = () => (
@@ -60,6 +69,38 @@ const BusinessConsulting = () => (
               <p className="text-primary-foreground/70 text-sm leading-relaxed">{s.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Companies We've Consulted */}
+    <section className="section-padding bg-warm-beige">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+            <Building2 className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+            Companies We've Consulted
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">Some of the businesses we've partnered with to deliver measurable results.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {clientCompanies.map((c, i) => {
+            const styles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle", "card-navy-subtle", "card-gold-subtle"];
+            return (
+              <div key={c.name} className={`${styles[i]} rounded-xl p-6 card-hover`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base font-semibold text-primary">{c.name}</h3>
+                    <span className="text-xs text-muted-foreground">{c.industry}</span>
+                  </div>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{c.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

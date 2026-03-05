@@ -27,7 +27,7 @@ const pillars = [
   },
   {
     icon: Plane,
-    title: "Travel Advisory",
+    title: "Study Abroad & Travel Advisory",
     description: "Comprehensive travel consulting for students, families, and professionals. Visa, relocation, and study abroad.",
     href: "/travel-advisory",
     cta: "Start Your Journey",
@@ -45,7 +45,7 @@ const processSteps = [
 const testimonials = [
   { name: "Sarah M.", role: "Startup Founder", quote: "Aliko Consultancy transformed our business strategy. Their expertise helped us secure funding and scale operations within 6 months.", pillar: "Business" },
   { name: "James K.", role: "Graduate Student", quote: "The career mentorship program gave me clarity on my path. I landed my dream role at a Fortune 500 company.", pillar: "Career" },
-  { name: "Amira R.", role: "International Student", quote: "From visa application to university enrollment, the travel advisory team made my study abroad journey seamless.", pillar: "Travel" },
+  { name: "Amira R.", role: "International Student", quote: "From visa application to university enrollment, the travel advisory team made my study abroad journey seamless.", pillar: "Study Abroad" },
 ];
 
 const stats = [
@@ -72,7 +72,6 @@ const Index = () => {
     <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-        {/* Static poster shown instantly */}
         <img
           src={heroBg}
           alt=""
@@ -98,7 +97,7 @@ const Index = () => {
               <span className="text-gradient-gold">Starts Here</span>
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-10 max-w-2xl leading-relaxed animate-fade-in" style={{ animationDelay: "0.15s" }}>
-              Premium consultancy in Business, Career, and Travel Advisory.
+              Premium consultancy in Business, Career, and Study Abroad & Travel Advisory.
               We provide expert guidance tailored to your unique goals, helping you succeed with confidence.
             </p>
             <div className="flex flex-wrap gap-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>

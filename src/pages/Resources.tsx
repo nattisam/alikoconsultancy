@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { FileText, BookOpen, CheckSquare, Download, PenTool, CheckCircle2, ExternalLink, Globe, GraduationCap } from "lucide-react";
+import { FileText, BookOpen, CheckSquare, Download, PenTool, CheckCircle2, ExternalLink, Globe, GraduationCap, Calendar, Info, Mail } from "lucide-react";
 import resourcesThumb from "@/assets/resources-thumb.jpg";
 import resBizPlan from "@/assets/res-biz-plan.jpg";
 import resCareerGuide from "@/assets/res-career-guide.jpg";
@@ -28,10 +28,47 @@ const categoryColors: Record<string, string> = {
 };
 
 const writingGuide = [
-  { name: "Professional CV / Resume", desc: "A well-structured document highlighting your education, skills, work experience, and achievements. Essential for every application.", tips: ["Tailor it to each position or program", "Use action verbs and quantify achievements", "Keep it to 1–2 pages maximum", "Include relevant extracurricular activities"] },
+  { name: "Professional CV / Resume", desc: "A well-structured document highlighting your education, skills, work experience, and achievements. Essential for every application — whether for High School, Undergraduate, Graduate, or PhD level.", tips: ["Tailor it to each position or program", "Use action verbs and quantify achievements", "Keep it to 1–2 pages maximum", "Include relevant extracurricular activities"] },
   { name: "Personal Statement", desc: "A critical 1-page essay outlining your life journey, character, academic interests, relevant skills, and motivation for a specific course or role.", tips: ["Use a story-driven tone", "Mention soft skills naturally", "Stay within 500–750 words", "Show genuine motivation"] },
   { name: "Statement of Purpose (SOP)", desc: "A 1–2 page essay defining your academic/professional journey, career goals, and motivation. Ideal for graduate applications and career pivots.", tips: ["Maintain a professional tone", "Connect past experience to future goals", "Stay within 500–1,000 words", "Be specific about why this program/company"] },
   { name: "Motivational Letter", desc: "A one-page document explaining why you are applying, why you are a perfect fit, and your future goals.", tips: ["Keep it concise and professional", "Highlight unique value you bring", "Show awareness of the organization", "Stay within 500–750 words"] },
+];
+
+const essayTypes = [
+  { name: "Common App Essay", desc: "Personal statement submitted to multiple US colleges. Showcases character, background, and unique voice.", tone: "Personal, emotional, reflective", wordLimit: "450–650 words", audience: "US Undergrad" },
+  { name: "Personal Statement", desc: "A critical 1-page essay outlining your life journey, character, academic interests, and motivation.", tone: "Story-driven", wordLimit: "500–750 words", audience: "General" },
+  { name: "Statement of Purpose (SOP)", desc: "A 1–2 page essay defining your academic/professional journey and career goals.", tone: "Professional", wordLimit: "500–1,000 words", audience: "Master's & PhD" },
+  { name: "Motivational Letter", desc: "Explains why you're applying, why you're a perfect fit, and your future goals.", tone: "Professional", wordLimit: "500–750 words", audience: "General" },
+  { name: "Supplemental Essay", desc: "Short, school-specific prompts required in addition to the main essay. Common in US & Canada.", tone: "Semi-professional", wordLimit: "250–450 words", audience: "US & Canada" },
+];
+
+const essayDos = [
+  "Be specific: name programs, professors, clubs, and campus values",
+  "Show alignment: connect their offerings to your goals",
+  "Make it personal: reference your experiences, not just their brochure",
+  "Stick to the word limit",
+];
+
+const essayDonts = [
+  "Don't copy-paste between schools",
+  "Don't focus on prestige alone",
+  "Don't list facts without tying them to your own journey",
+];
+
+const applicationDeadlines = [
+  { region: "USA (Undergrad)", details: ["Early Decision: Nov 1–15", "Regular Decision: Jan 1–15", "Rolling Admission: After January (applying after July not recommended for internationals)"] },
+  { region: "USA (Master's)", details: ["Fall Intake: August – February", "Spring Intake: Starts from January"] },
+  { region: "Canada (Master's)", details: ["Fall Intake: January – February"] },
+  { region: "UK (Undergrad)", details: ["October 15 is usually the deadline"] },
+  { region: "Europe", details: ["January – April"] },
+  { region: "China", details: ["September Intake: December – April"] },
+];
+
+const professorOutreach = [
+  { step: "1", title: "Prepare Your Profile", desc: "Ensure your email name is professional and your CV is polished before reaching out." },
+  { step: "2", title: "Research the University & Department", desc: "Understand the professor's research interests and recent publications." },
+  { step: "3", title: "Find the Right Professor", desc: "Identify professors whose research aligns with your interests using university faculty pages." },
+  { step: "4", title: "Craft a Compelling Email", desc: "Write a concise, personalized email expressing genuine interest in their work and how your skills align." },
 ];
 
 const usefulPlatforms = [
@@ -86,7 +123,7 @@ const Resources = () => {
           <div className="max-w-3xl">
             <span className="text-xs font-semibold uppercase tracking-wider text-accent mb-4 block">Resources</span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-6">Knowledge Hub</h1>
-            <p className="text-primary-foreground/70 text-lg">Guides, templates, tools, and curated links to support your journey.</p>
+            <p className="text-primary-foreground/70 text-lg">Guides, templates, tools, and curated links to support your journey — applicable to all academic levels.</p>
           </div>
         </div>
       </section>
@@ -99,7 +136,7 @@ const Resources = () => {
               <PenTool className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
               CV & Application Writing Guide
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Master the art of writing compelling professional documents that get results.</p>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Master the art of writing compelling professional documents — general guidance for High School, Undergraduate, Graduate, and PhD applicants.</p>
           </div>
 
           <Accordion type="single" collapsible>
@@ -122,6 +159,119 @@ const Resources = () => {
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
+      </section>
+
+      {/* Essay Writing Guide */}
+      <section className="section-padding bg-gradient-cool">
+        <div className="container-wide">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+              <PenTool className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+              Essay Writing Guide
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Understanding the different types of application essays and how to craft them effectively.</p>
+          </div>
+
+          <Accordion type="single" collapsible className="mb-10">
+            {essayTypes.map((essay) => (
+              <AccordionItem key={essay.name} value={essay.name} className="bg-card border border-border rounded-xl mb-3 px-6">
+                <AccordionTrigger className="font-serif text-base font-semibold text-primary hover:no-underline">
+                  <span className="flex items-center gap-3">
+                    {essay.name}
+                    <span className="text-xs font-normal text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{essay.audience}</span>
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <p className="text-muted-foreground text-sm mb-3">{essay.desc}</p>
+                  <div className="flex flex-wrap gap-4 text-xs">
+                    <span className="bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">Tone: {essay.tone}</span>
+                    <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full font-medium">{essay.wordLimit}</span>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card-forest-subtle rounded-xl p-8">
+              <h3 className="font-serif text-xl font-semibold text-primary mb-4">✓ Do's</h3>
+              <ul className="space-y-3">
+                {essayDos.map((d) => (
+                  <li key={d} className="flex items-start gap-3 text-sm text-foreground">
+                    <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card-navy-subtle rounded-xl p-8">
+              <h3 className="font-serif text-xl font-semibold text-primary mb-4">✗ Don'ts</h3>
+              <ul className="space-y-3">
+                {essayDonts.map((d) => (
+                  <li key={d} className="flex items-start gap-3 text-sm text-foreground">
+                    <Info className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Application Deadlines by Region */}
+      <section className="section-padding bg-warm-beige">
+        <div className="container-wide">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+              <Calendar className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+              Application Deadlines by Region
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Plan ahead with key deadlines for universities worldwide — applicable to all academic levels.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {applicationDeadlines.map((d) => (
+              <div key={d.region} className="bg-card border border-border rounded-xl p-6">
+                <h3 className="font-serif text-lg font-semibold text-primary mb-4">{d.region}</h3>
+                <ul className="space-y-2">
+                  {d.details.map((detail) => (
+                    <li key={detail} className="flex items-start gap-2 text-sm text-foreground">
+                      <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How to Reach Out to Professors */}
+      <section className="section-padding bg-off-white">
+        <div className="container-wide">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-4">
+              <Mail className="w-7 h-7 inline-block mr-2 text-accent -mt-1" />
+              How to Reach Out to Professors
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">A step-by-step guide for contacting professors for research and graduate opportunities.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {professorOutreach.map((s, i) => {
+              const cardStyles = ["card-navy-subtle", "card-gold-subtle", "card-teal-subtle", "card-forest-subtle"];
+              return (
+                <div key={s.step} className={`${cardStyles[i]} rounded-xl p-6 text-center card-hover`}>
+                  <div className="w-12 h-12 rounded-full bg-navy flex items-center justify-center mx-auto mb-4">
+                    <span className="text-accent font-bold text-lg">{s.step}</span>
+                  </div>
+                  <h3 className="font-serif text-base font-semibold text-primary mb-2">{s.title}</h3>
+                  <p className="text-muted-foreground text-sm">{s.desc}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -171,7 +321,7 @@ const Resources = () => {
         </div>
       </section>
 
-      {/* Resources Grid */}
+      {/* Downloadable Resources Grid */}
       <section className="section-padding">
         <div className="container-wide">
           <div className="text-center mb-12">

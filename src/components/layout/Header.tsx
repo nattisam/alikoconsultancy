@@ -8,7 +8,7 @@ const navItems = [
   { label: "Business Consulting", href: "/business-consulting" },
   { label: "Career Guidance", href: "/career-guidance" },
   {
-    label: "Travel Advisory",
+    label: "Study Abroad & Travel Advisory",
     href: "/travel-advisory",
     children: [
       { label: "High School", href: "/travel-advisory/high-school" },
